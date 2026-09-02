@@ -1,4 +1,4 @@
-# AGENTS.md — mathmodel-skill v7.3.0 (Codex 入口 / Project Instructions)
+# AGENTS.md — mathmodel-skill v7.3.1 (Codex 入口 / Project Instructions)
 
 > 本文件是 **Codex** (以及任何遵循 `AGENTS.md` 约定的 agentic CLI) 的项目级入口。
 > 真正的工作流定义在 `SKILL.md`，请把它当作主指令读取。本文件只解释 **harness 差异**。

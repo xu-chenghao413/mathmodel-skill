@@ -2,6 +2,11 @@
 
 All notable public changes are recorded here.
 
+## 7.3.1
+
+- Updated the CUMCM AI-use baseline to the official 2026 trial rules effective 2026-09-01.
+- Recorded the official pre-reference AI declaration wording and supporting `AI工具使用详情.pdf` requirements.
+
 ## 7.3.0
 
 - Added Autopilot delivery, persistent source/evidence/artifact state, deterministic validation and versioned packaging.
@@ -21,4 +26,3 @@ All notable public changes are recorded here.
 - Introduced Codex plugin packaging, cross-harness state, multi-competition routing, weighted scoring and the original staged workflow.
 
 Earlier implementation details remain available through the cleaned Git history. Removed third-party or private artifacts are intentionally not preserved in public tags.
-

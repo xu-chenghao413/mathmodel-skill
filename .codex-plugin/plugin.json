@@ -1,6 +1,6 @@
 {
   "name": "mathmodel-skill",
-  "version": "7.3.0",
+  "version": "7.3.1",
   "description": "Autopilot and guided end-to-end delivery skill for CUMCM, MCM/ICM, and Diangong Cup, with reproducibility, review, compliance, and versioned delivery folders.",
   "author": {
     "name": "handsomeZR-netizen",
