@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "blocking_count": null,
+  "methods": [
+    {
+      "method_id": "M1",
+      "paper_name": null,
+      "math_or_pseudocode_locator": null,
+      "code_file": null,
+      "code_function": null,
+      "parameter_and_seed_locator": null,
+      "solver_model_class": null,
+      "solver_algorithm_description": null,
+      "solver_status_gap_time_limit_locator": null,
+      "result_figure_or_table_locator": null,
+      "baseline_ablation_or_exact_check_locator": null,
+      "consistency_status": "needs_review",
+      "blocking_reasons": []
+    }
+  ]
+}

@@ -1,17 +1,28 @@
 # Third-party notices
 
-The original code, documentation, and LaTeX assembly templates in this repository are available under the root [MIT License](./LICENSE).
+The root MIT License applies only to original code, documentation, and templates authored for this repository, unless a file states otherwise.
 
-## CUMCM template provenance
+## Excluded CUMCMThesis material
 
-The CUMCM electronic-paper template at `templates/latex/cumcm/main.tex` was independently written for this repository from the public competition-format requirements. It does not copy or redistribute the source code, documentation, examples, or binary assets of `latexstudio/CUMCMThesis`; those files are not included in this release.
+This release does not include or license any source code, documentation, examples, or binary files from [`latexstudio/CUMCMThesis`](https://github.com/latexstudio/CUMCMThesis).
 
-The template is an assembly aid, not an official CUMCM template or an endorsement by the contest organizer. The current official rules always take precedence.
+The repository's current CUMCM file at `templates/latex/cumcm/main.tex` is an independently written assembly template based on public format requirements. It is not an official contest template and does not imply endorsement by the contest organizer.
+
+Historical copies of `latexstudio/CUMCMThesis` were removed from maintained branches, tags, and rewritten Git history before the v7.3.0 release. Existing third-party forks or clones may retain old objects outside this repository owner's control.
+
+## Design influences and optional interoperability
+
+The workflow was informed by general mathematical-modeling practices and by experience using separately installed `mcm` and `nature-*` skills. This repository does not bundle their source code, documentation, or assets. Optional interoperability is performed at runtime only when a separately installed skill is available, and that skill remains subject to its own license.
+
+The names `Nature` and `nature-*` are used only to identify optional local skill packages. This project is not affiliated with or endorsed by Springer Nature, the authors of those skills, OpenAI, or Anthropic.
 
 ## Runtime dependencies
 
-Tools and libraries such as Python, Pandoc, TeX Live, MiKTeX, XeLaTeX, pdfLaTeX, CTeX, Fandol, and the Python packages listed in the requirements files are installed separately by the user. They are not vendored by this repository and remain subject to their own licenses.
+Python, Pandoc, TeX Live, MiKTeX, XeLaTeX, pdfLaTeX, CTeX, Fandol, Poppler, and Python packages listed in the requirements files are installed separately. They are not vendored by this repository and remain subject to their respective licenses.
 
-## External research material
+## Competition and research material
 
-Competition rules, linked papers, datasets, websites, trademarks, and other external sources are not relicensed by this repository's MIT License. Links, provenance notes, and derived descriptive statistics do not transfer ownership or redistribution rights. Users remain responsible for checking the terms that apply to any material they download or submit.
+Competition rules, linked papers, datasets, websites, trademarks, and other external sources are not relicensed by this repository's MIT License. Public accessibility does not by itself grant redistribution rights.
+
+The public repository does not include source-paper PDFs, user-provided manuscript files, page-by-page private case data, or copied paper passages. Aggregate descriptive statistics and independently written workflow guidance are documented in [`PROVENANCE.md`](./PROVENANCE.md).
+

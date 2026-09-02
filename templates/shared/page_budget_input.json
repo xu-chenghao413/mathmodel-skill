@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "profile": "balanced",
+  "official_body_target": null,
+  "questions": [
+    {
+      "id": "Q1",
+      "title": "问题一",
+      "importance": 3,
+      "scenario_load": 3,
+      "derivation_depth": 3,
+      "novelty_evidence": 3,
+      "validation_load": 3,
+      "downstream_reuse": 3,
+      "reuse_discount": 0.0
+    }
+  ],
+  "appendix": {
+    "estimated_pages": null,
+    "required_items": [
+      "支撑材料文件清单及正文映射",
+      "完整可运行源代码与运行入口",
+      "环境、依赖、随机种子和求解器信息",
+      "必要的长表、扩展图与中间结果"
+    ]
+  }
+}

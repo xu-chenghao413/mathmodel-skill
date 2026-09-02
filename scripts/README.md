@@ -1,162 +1,130 @@
 # Scripts 工具说明
 
-这里的脚本分为两组：比赛过程中使用的运行时工具，以及维护资料库时才使用的离线工具。下列命令均假设当前目录是 skill 根目录；用户项目中的动态文件统一放在项目工作目录，不写回 skill。
+本目录脚本按"运行时" vs "离线一次性"分两类。
 
-## 运行时工具
+---
 
-### `doctor.py` — 环境与包结构预检
+## 运行时脚本 (各 stage 调用)
 
-在启动工作流或切换竞赛时运行。默认同时检查 skill 结构、竞赛包、JSON 配置和本地渲染工具；`--skip-tools` 适合 CI 或只做静态检查。
+### `bootstrap_run.py` — Autopilot / Guided 工作区初始化
+
+**调用时机**: Stage 0；已有 state 用 `--resume`，不会覆盖。
 
 ```bash
-python scripts/doctor.py --competition cumcm --workspace /path/to/project
-python scripts/doctor.py --competition mcm --skip-tools --json
-python scripts/doctor.py --competition diangong --require-renderer --require-modeling
+python scripts/bootstrap_run.py --workspace cwd --mode autopilot \
+  --competition auto --problem problem.pdf --attachment data.xlsx
 ```
 
-### `score_artifact.py` — L1 Critic 结果处理
+建立 v4.2 state、标准交付目录、source packet 哈希和竞赛推断；CUMCM 同时初始化 2026 合规状态和关键事件级 AI 使用日志。无法锁定模板或缺必要文件时返回非零并写 blocker。
 
-校验 critique JSON、计算实际 verdict，并把阶段分数与迭代记录写入项目的 `state/decision_log.json`。
+### `plan_paper_budget.py` — CUMCM 自适应页数预算
+
+**调用时机**: Stage 8 写正文之前。摘要、官方正文和附录三账分开；官方正文按 compact/balanced/dense 或显式目标预算，小问按六维证据负担动态分配。
 
 ```bash
-python scripts/score_artifact.py \
-  --stage 5 \
-  --critique /path/to/project/state/critique_v0.json \
-  --decision-log /path/to/project/state/decision_log.json
+python scripts/plan_paper_budget.py --input cwd/analysis/page_budget_input.json \
+  --output cwd/analysis/page_budget.json
 ```
 
-不传 `--decision-log` 时，脚本按 `MATHMODEL_STATE_DIR`、兼容变量 `CUMCM_STATE_DIR`、最后 `<cwd>/state/decision_log.json` 的顺序解析路径。
+目标不在 26–28 页硬性区间内、输入评分无效或核心篇幅不足时非零退出。附录始终 `completeness_driven` 且不设页数上限。
 
-所有子问完成后，可聚合 per-Qi 结果并把 `qi_status`、`review_qis`、`refine_qis` 与最终 verdict 原子写回 Stage 5：
+### `score_artifact.py` — L1 Critic 输出处理
+**调用时机**: 每个 stage 结尾
+**输入**: critique JSON (Claude L1 critic 输出) + stage_id
+**输出**: 写入 `cwd/state/decision_log.json` 的 scores/iterations 字段, 决定下一步 (next_stage / section_patch / carryover / halt)
 
 ```bash
-python scripts/score_artifact.py \
-  --mode aggregate_qi \
-  --qi-results /path/to/project/state/qi_results.json \
-  --decision-log /path/to/project/state/decision_log.json
+python scripts/score_artifact.py --stage 5 --critique state/critique_v0.json
+# 路径协议: 默认 cwd/state/decision_log.json, 可用 MATHMODEL_STATE_DIR env var 覆盖
 ```
 
-### `extract_diff.py` — 定向修补辅助器
-
-根据 Critic 指出的问题生成 section patch prompt，或应用已经生成的 section patch / unified diff。它的价值是缩小修改范围并保留已通过章节；实际节省量取决于论文和修补范围，不设固定比例。
+### `extract_diff.py` — Section-level patch 生成器
+**调用时机**: L1 verdict == "refine" 时
+**输入**: artifact 路径 + critique JSON
+**输出**: section-level patch 精修 prompt (省 60% token vs 重生成全文)
 
 ```bash
-# 生成定向修补 prompt
-python scripts/extract_diff.py \
-  --artifact /path/to/project/paper_workspace/06_models.md \
-  --critique /path/to/project/state/critique_v0.json \
-  --mode section \
-  --output /path/to/project/state/refine_prompt.md
-
-# 应用模型返回的 patch；--apply 模式不需要 --critique
-python scripts/extract_diff.py \
-  --artifact /path/to/project/paper_workspace/06_models.md \
-  --apply /path/to/project/state/refine_patch.md \
-  --mode section \
-  > /path/to/project/paper_workspace/06_models_v1.md
+# 生成 prompt
+python scripts/extract_diff.py --artifact a.md --critique c.json --mode section --output prompt.txt
+# 应用 LLM 返回的 patch
+python scripts/extract_diff.py --artifact a.md --apply patch.txt --mode section > a_v1.md
 ```
 
-### `render_paper.py` — Markdown 章节装配与 LaTeX 编译
-
-把 `paper_workspace/` 中的编号 Markdown 章节装入所选竞赛的 `main.tex`。三类模板统一使用显式 section marker；正式编译要求 Pandoc 和对应 LaTeX 引擎，并在必需的 `01`–`10` 章节缺失、为空，或 marker 缺失、重复、未知时停止。内置简化转换器只用于 `--no-compile` 结构预检。
-
-正式渲染还会检查提交元数据：CUMCM 要求最终题目和关键词，MCM/ICM 要求控制号、题号、题目和关键词，电工杯要求报名序号、题号、题目和关键词。CLI 参数优先于 `decision_log.paper_metadata`；`XXXX`、`X`、`keyword1` 等占位值会阻断编译。只有显式组合 `--allow-placeholders --no-compile` 才会生成带醒目标记的结构预览。
-
-CUMCM 模板按 2026 电子论文基线提供 A4、四边 2.5 cm、第一页摘要、无目录、正文最多 30 页和匿名字段最小化等 guard；它是仓库原创装配模板，不是官方模板，仍须在 Stage 0 与 Stage 9 重新核对当届通知。
+### `render_paper.py` — Markdown → 竞赛 LaTeX 模板 → PDF
+**调用时机**: stage 8 末尾 / stage 9 编译终稿
+**输入**: 含分节 .md 的 workspace 目录（MCM/电工杯 10 个；CUMCM 2026 为 11 个，增加 AI 声明）
+**输出**: paper.pdf (xelatex 三编)
 
 ```bash
-python scripts/render_paper.py \
-  --workspace /path/to/project/paper_workspace \
-  --competition cumcm \
-  --decision-log /path/to/project/state/decision_log.json \
-  --output-dir /path/to/project/paper_output
-
-# 只检查模板装配，不编译 PDF
-python scripts/render_paper.py \
-  --workspace /path/to/project/paper_workspace \
-  --competition mcm \
-  --output-dir /path/to/project/paper_output \
-  --no-compile \
-  --allow-placeholders
+python scripts/render_paper.py --workspace cwd/paper_workspace/ --output-dir cwd/paper_output/
+# 优先用 pandoc (需独立安装), 失败回退手工正则
 ```
 
-### `render_ai_usage.py` — AI 使用记录导出
+### `validate_delivery.py` — 最终交付机械门
 
-从 `decision_log.compliance.ai_usage` 生成竞赛要求的披露材料，并直接放到渲染器约定的位置。CUMCM 使用 AI 时输出到 `support_materials/AI工具使用详情.{md,pdf}`；显式未使用时只输出 `paper_workspace/AI工具未使用声明.md`，渲染器把它接在参考文献后。MCM 输出 `paper_workspace/11_ai_use_report.md`，且不重复模板提供的标题。CUMCM 的 PDF 生成依赖 ReportLab。
+**调用时机**: Stage 9 最后；科学与视觉 QA 完成之后。
 
 ```bash
-python scripts/render_ai_usage.py \
-  --decision-log /path/to/project/state/decision_log.json \
-  --competition cumcm \
-  --paper-workspace /path/to/project/paper_workspace \
-  --support-dir /path/to/project/support_materials
-
-# 先只检查 Markdown 内容
-python scripts/render_ai_usage.py \
-  --decision-log /path/to/project/state/decision_log.json \
-  --competition cumcm \
-  --paper-workspace /path/to/project/paper_workspace \
-  --support-dir /path/to/project/support_materials \
-  --markdown-only
+python scripts/validate_delivery.py --workspace cwd
 ```
 
-每条 AI 使用记录都必须含 `use_stage`，并完整记录 `query` + `output`，或为代码补全等非对话式工具提供 `disclosure`。`ai_usage: []` 只在团队明确核对“未使用”后填写；缺失或 `null` 会报错。
+检查最终 PDF/TeX/BibTeX、`src/run_all.*`、环境、结果、图表、复现/统计/引用/算法声明一致性/页结构/视觉/评审 QA 和占位符，生成 `qa/delivery_validation.json` 与 `DELIVERY_MANIFEST.md`。非零退出码不得标记 submission-ready。
 
-## 离线维护工具
+### `build_ai_disclosure.py` — CUMCM 2026 AI 使用详情
 
-这两个脚本用于维护样本资料，不应在比赛主流程中自动运行。先安装精简维护依赖：
+从真实填写的 `qa/ai_usage_log.json` 生成 `AI 工具使用详情.tex/pdf`；新 schema 按关键实质事件聚合同一目的多轮，记录提示/输出摘要、团队决定、人工修改、核验与影响文件，不导出完整聊天。缺工具版本、用途、关键过程、采纳修改或核验记录时失败；旧四字段用途记录仍可渲染。
 
 ```bash
-python -m pip install -r scripts/requirements-maintenance.txt
-python -m playwright install chromium  # 仅下载官方展廊页面时需要
+python scripts/build_ai_disclosure.py --log cwd/qa/ai_usage_log.json \
+  --output cwd/qa/AI工具使用详情.pdf
 ```
 
-### `download_cumcm_papers.py` — 官方展廊下载与 PDF 重建
+### `package_delivery.py` — 单文件夹版本化交付
 
-当前下载器覆盖脚本内登记的 2023、2024 官方展廊页面。页面以图片形式展示论文，因此脚本使用 Playwright 发现详情页，再用 Pillow 重建 PDF。
+三竞赛 Stage 9 最后运行，每次新建版本化文件夹且不覆盖旧包。CUMCM 分支额外把 `01_正式提交/` 与内部复现留档严格分开，并生成支撑材料 ZIP、本地 MD5/SHA-256、2026 合规报告和 package manifest。未获得参赛队人工确认时仍生成候选包，但保留 `NOT_SUBMISSION_READY.md` 并返回非零。
 
 ```bash
-python scripts/download_cumcm_papers.py \
-  --papers-dir /path/to/cumcm-papers \
-  --years 2023 2024
+python scripts/package_delivery.py --workspace cwd \
+  --commitment current-year-commitment.pdf --number-page current-year-number-page.pdf
 ```
 
-下载内容可能受站点结构、网络和来源授权影响；运行前应确认使用范围，并保留脚本生成的下载报告。
+---
 
-### `ingest_papers.py` — 可提取 PDF 的统计蒸馏
+## 离线一次性脚本 (skill 维护期使用, 不在运行时跑)
 
-扫描指定目录中的 PDF，过滤无法提取足够文字的图片型文件，再生成描述性统计 Markdown。仓库记录了 91 份来源文件，其中 59 份满足当前提取条件；重新运行时以命令输出的“成功解析 / 文本可提取”计数为准。
+### `ingest_papers.py` — 91 篇 PDF 离线烘焙 → empirical_distribution.md
+**调用时机**: skill 安装后一次性运行 / 添加新 PDF 后增量更新
+**输入**: `references/papers/` 下 91 篇真国赛 PDF
+**输出**: `references/empirical_distribution.md` (字数/章节/图表/公式实测分位数)
 
 ```bash
-python scripts/ingest_papers.py \
-  --papers-dir /path/to/cumcm-papers \
-  --output /path/to/empirical_distribution.md
+python scripts/ingest_papers.py --papers-dir references/papers/ --output references/empirical_distribution.md
 ```
 
-生成值是样本子集的观察结果，不是官方评分线，也不会自动覆盖 `competitions/cumcm/empirical.json`。采用任何阈值前仍需人工审阅样本构成、提取误差和当年规则。
+烘焙后的 markdown 在运行时被 L1 critic 读取；字数/图表/公式 p25/p50/p75 只作描述性先验，不是配额或硬阈值。
 
-## 路径协议
+---
 
-| 类型 | 位置 | 覆盖方式 |
-|---|---|---|
-| skill 静态资源 | `<skill>/{references,templates,scripts,competitions}` | 不覆盖 |
-| 项目状态 | `<project>/state/decision_log.json` | `--decision-log` 或 `MATHMODEL_STATE_DIR` |
-| 项目产物 | `<project>/{results,figures,paper_workspace,paper_output}` | 通过各脚本参数指定 |
+## 路径协议总览
 
-`<cwd>` 只是命令启动时的当前目录，不是一个应当原样创建的文件夹名。
+| 类型 | 位置 | env var 覆盖 |
+|------|------|-------------|
+| skill 内静态资源 | `<skill>/{references, templates, scripts}` | 无 |
+| 用户 state | `cwd/state/decision_log.json` | `MATHMODEL_STATE_DIR` (兼容 `CUMCM_STATE_DIR`) |
+| 用户产物 | `cwd/{analysis,src,results,figures,paper_workspace,paper_output,support_materials,qa,delivery}` | 无 (固定) |
 
-## 测试 fixture
+`cwd` = Claude Code 启动时的工作目录 (用户的项目目录)。
+`<skill>` = skill 安装目录 (即本 README 所在目录的父目录)。
 
-Critic schema 样本位于 `tests/fixtures/`：
+---
 
-- `test_critique_good.json`：有效的 stage-level critique。
-- `test_critique_bad_keys.json`：包含不在白名单中的维度键，预期校验失败。
+## 单元测试 fixture
 
-在临时项目目录运行写入型示例，避免修改仓库内的模板状态：
+L1 critic schema 验证的测试样本在 `<skill>/tests/fixtures/`:
+- `test_critique_good.json` — 应通过校验 (verdict=pass)
+- `test_critique_bad_keys.json` — 应触发 dim key 白名单 FAIL
 
 ```bash
-python scripts/score_artifact.py \
-  --stage 1 \
-  --critique tests/fixtures/test_critique_good.json \
-  --decision-log /tmp/mathmodel-test/state/decision_log.json
+PYTHONIOENCODING=utf-8 python scripts/score_artifact.py --stage 1 \
+    --critique tests/fixtures/test_critique_good.json
 ```

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "pdf_total_pages": null,
+  "abstract_pages": 1,
+  "official_body_start_pdf_page": 2,
+  "official_body_end_pdf_page": null,
+  "official_body_pages": null,
+  "appendix_start_pdf_page": null,
+  "appendix_pages": null,
+  "arithmetic_check": false,
+  "source": "rendered_pdf_visual_and_text_audit",
+  "notes": []
+}

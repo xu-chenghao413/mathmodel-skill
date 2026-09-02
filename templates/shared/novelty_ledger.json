@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "unsupported_claims": null,
+  "allowed_categories": [
+    "problem_representation",
+    "constraint_engineering",
+    "model_coupling",
+    "sampling_or_computation_reformulation",
+    "validation_design",
+    "decision_insight",
+    "genuine_algorithmic_improvement",
+    "standard_method_or_application_adaptation"
+  ],
+  "claims": [
+    {
+      "claim_id": "N1",
+      "category": null,
+      "proposed_wording": null,
+      "math_or_process_locator": null,
+      "code_locator": null,
+      "baseline_or_ablation_locator": null,
+      "measured_effect": null,
+      "allowed_wording": null,
+      "forbidden_stronger_wording": null,
+      "status": "needs_evidence"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "name": "mathmodel-skill",
-  "version": "6.1.0",
-  "description": "A stateful, compliance-aware ten-stage workflow for CUMCM, MCM/ICM, and Diangong Cup mathematical modeling competitions.",
+  "version": "7.3.0",
+  "description": "Autopilot and guided end-to-end delivery skill for CUMCM, MCM/ICM, and Diangong Cup, with reproducibility, review, compliance, and versioned delivery folders.",
   "author": {
     "name": "handsomeZR-netizen",
     "url": "https://github.com/handsomeZR-netizen"
@@ -18,20 +18,21 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "MathModel｜数学建模工作流",
-    "shortDescription": "让三类数学建模竞赛从选题到终稿持续收敛",
-    "longDescription": "A Codex-native mathematical modeling competition workflow that carries team decisions from problem selection through modeling, robustness, writing, compliance review, and final submission. Ten staged checkpoints, persistent state, competition-specific rules, deterministic helpers, and targeted revision keep long-running collaboration coherent.",
+    "displayName": "Math Modeling Skill",
+    "shortDescription": "赛题到可复现论文/PDF交付包的一键数模与终审工作流",
+    "longDescription": "A Codex-native mathematical modeling competition skill with guided and autopilot modes. Given a problem and attachments, it produces executable models, verified results, statistics, figures, citations, a competition-specific paper/PDF, blind review artifacts, and one versioned delivery folder. Optional external skills are invoked only when separately installed; their source code is not bundled.",
     "developerName": "handsomeZR-netizen",
     "category": "Education",
     "capabilities": [
       "Interactive",
-      "Write"
+      "Write",
+      "Analyze"
     ],
     "websiteURL": "https://github.com/handsomeZR-netizen/mathmodel-skill",
     "defaultPrompt": [
-      "Use $mathmodel-skill to guide my CUMCM team from kickoff to submission.",
-      "Use $mathmodel-skill to compare MCM problem choices and record the decision.",
-      "Use $mathmodel-skill to run a compliance-first final review of our modeling paper."
+      "Use $mathmodel-skill on this CUMCM problem and produce the full verified delivery package in one folder.",
+      "Use $mathmodel-skill to compare MCM problem choices.",
+      "Use $mathmodel-skill to review a modeling paper draft."
     ],
     "brandColor": "#10A37F"
   }

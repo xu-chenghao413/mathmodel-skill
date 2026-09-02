@@ -21,6 +21,14 @@ venv/
 
 # 蒸馏后 PDF 已删, 防误提交大文件
 references/papers/*.pdf
+references/papers/**/*.pdf
+
+# 私有案例与未获再分发授权的材料
+references/private/
+references/cases/
+references/cumcm_20??[A-F]_*.md
+competitions/cumcm/first_prize_*.json
+templates/latex/cumcm/cumcmthesis/
 
 # OS / 编辑器
 .DS_Store

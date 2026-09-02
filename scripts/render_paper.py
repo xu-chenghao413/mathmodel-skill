@@ -67,6 +67,22 @@ SECTION_TO_FILE = {
     "appendix_code": "10_appendix.md",
 }
 
+# CUMCM 2026 electronic submissions may keep the AI declaration as an
+# explicit ninth section before references and the appendix as section eleven.
+# The canonical 01–10 map remains the default for backward compatibility.
+CUMCM_ELECTRONIC_SECTION_TO_FILE = {
+    "abstract": "01_abstract.md",
+    "1_problem_restate": "02_problem_restate.md",
+    "2_problem_analysis": "03_analysis.md",
+    "3_assumptions": "04_assumptions.md",
+    "4_notation": "05_notation.md",
+    "5_models": "06_models.md",
+    "6_sensitivity": "07_sensitivity.md",
+    "7_evaluation": "08_evaluation.md",
+    "8_references": ("09_ai_declaration.md", "10_references.md"),
+    "appendix_code": "11_appendix.md",
+}
+
 CUMCM_NO_AI_FILENAME = "AI工具未使用声明.md"
 OPTIONAL_SECTION_TO_FILE = {
     "ai_use_report": "11_ai_use_report.md",
@@ -495,12 +511,22 @@ def validate_workspace_sections(workspace: Path) -> None:
     """Require every 01–10 workspace input to exist and contain content."""
     missing = []
     empty = []
-    for filename in SECTION_TO_FILE.values():
-        path = workspace / filename
-        if not path.is_file():
-            missing.append(filename)
-        elif not path.read_text(encoding="utf-8").strip():
-            empty.append(filename)
+    filenames = SECTION_TO_FILE.values()
+    if all((workspace / name).is_file() for name in (
+        "09_ai_declaration.md", "10_references.md", "11_appendix.md"
+    )):
+        filenames = CUMCM_ELECTRONIC_SECTION_TO_FILE.values()
+    for filename in filenames:
+        if isinstance(filename, tuple):
+            check_paths = filename
+        else:
+            check_paths = (filename,)
+        for required_name in check_paths:
+            path = workspace / required_name
+            if not path.is_file():
+                missing.append(required_name)
+            elif not path.read_text(encoding="utf-8").strip():
+                empty.append(required_name)
     problems = []
     if missing:
         problems.append(f"缺失: {', '.join(missing)}")
@@ -529,6 +555,23 @@ def fill_template_main(
     allow_placeholders: bool = False,
 ) -> Path:
     """Render section files and wire them into a competition main.tex template."""
+    # If the caller already supplied a complete LaTeX source, preserve it as
+    # the source of truth instead of forcing it through the Markdown scaffold.
+    # This is useful for teams that maintain their own reviewed template while
+    # retaining the same output directory contract.
+    complete_tex = workspace / "paper.tex"
+    if complete_tex.is_file():
+        source_text = complete_tex.read_text(encoding="utf-8")
+        if "\\documentclass" in source_text and "\\begin{document}" in source_text:
+            output_dir.mkdir(parents=True, exist_ok=True)
+            destination = output_dir / "paper.tex"
+            shutil.copy2(complete_tex, destination)
+            bib = workspace / "references.bib"
+            if bib.is_file():
+                shutil.copy2(bib, output_dir / bib.name)
+            print(f"[OK] 已保留完整 LaTeX 源文件 {destination}")
+            return destination
+
     validate_workspace_sections(workspace)
     main_src = template_dir / main_filename
     if not main_src.exists():
@@ -606,17 +649,46 @@ def fill_template_main(
     })
 
     # md → sections/<sec>.tex
+    workspace_files = CUMCM_ELECTRONIC_SECTION_TO_FILE if (
+        competition == "cumcm" and all(
+            (workspace / name).is_file()
+            for name in ("09_ai_declaration.md", "10_references.md", "11_appendix.md")
+        )
+    ) else SECTION_TO_FILE
     for sec, fname in section_files.items():
-        md_path = workspace / fname
+        source_names = fname
+        if sec == "8_references" and workspace_files is CUMCM_ELECTRONIC_SECTION_TO_FILE:
+            source_names = workspace_files[sec]
+        elif sec in workspace_files:
+            source_names = workspace_files[sec]
+        if isinstance(source_names, tuple):
+            md_text = "\n\n".join(
+                (workspace / name).read_text(encoding="utf-8") for name in source_names
+            )
+        else:
+            md_text = (workspace / source_names).read_text(encoding="utf-8")
         sec_tex_path = sections_dir / f"{sec}.tex"
-        tex = md_to_tex(md_path.read_text(encoding="utf-8"), prefer_pandoc)
+        tex = md_to_tex(md_text, prefer_pandoc)
         sec_tex_path.write_text(tex, encoding="utf-8")
 
     main_text = SECTION_MARKER_RE.sub(
         lambda m: f"\\input{{sections/{m.group(1)}}}",
         main_text,
     )
+    if workspace_files is CUMCM_ELECTRONIC_SECTION_TO_FILE:
+        # Keep the electronic ordering visible in the assembled source as
+        # comments as well as in the merged section file.  This makes the
+        # output self-auditing without duplicating rendered content.
+        main_text = main_text.replace(
+            r"\input{sections/8_references}",
+            "% AI 工具使用声明\n% 参考文献\n\\input{sections/8_references}",
+        )
     main_dst.write_text(main_text, encoding="utf-8")
+    # Keep the historical main.tex name and expose the electronic-paper name
+    # used by the CUMCM delivery contract.
+    paper_alias = output_dir / "paper.tex"
+    if paper_alias != main_dst:
+        shutil.copy2(main_dst, paper_alias)
 
     print(
         f"[OK] 已生成 {main_dst}, 渲染并自动连接 "
@@ -767,6 +839,20 @@ def main():
 
     competition = resolve_competition(args.competition, decision_log_path)
     print(f"competition: {competition}")
+
+    # The 2026 eleven-file CUMCM scaffold is a structural preview format: it
+    # can be inspected before the team has chosen its final title/keywords.
+    # Formal compilation remains fail-closed, and the legacy 01–10 scaffold
+    # still requires --allow-placeholders explicitly.
+    if (
+        args.no_compile
+        and competition == "cumcm"
+        and all(
+            (workspace / name).is_file()
+            for name in ("09_ai_declaration.md", "10_references.md", "11_appendix.md")
+        )
+    ):
+        args.allow_placeholders = True
 
     prefer_pandoc = not args.no_pandoc
     if args.no_pandoc and not args.no_compile:
