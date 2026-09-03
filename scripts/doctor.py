@@ -131,7 +131,6 @@ def run_checks(
         "templates/shared/decision_log.json",
         "scripts/score_artifact.py",
         "scripts/extract_diff.py",
-        "scripts/install_skill.py",
         "scripts/render_paper.py",
         "scripts/render_ai_usage.py",
         "templates/shared/ai_usage_ledger.json",

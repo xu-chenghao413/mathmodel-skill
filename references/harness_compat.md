@@ -1,24 +1,21 @@
-# Harness 兼容协议 (跨 Agent Skills 客户端)
+# Harness 兼容协议 (Claude Code / Codex)
 
-本文件定义 mathmodel-skill 在不同 agentic harness 下运行时的**统一行为约定**。skill 主体内容 (`SKILL.md`, `stage_NN.md`, `competitions/*`) 保持 harness-agnostic；客户端只在发现路径、交互组件和命令入口上存在差异。完整运行时 payload 必须和 `SKILL.md` 一起安装。
+本文件定义 mathmodel-skill 在不同 agentic harness 下运行时的**统一行为约定**。从 v6.0 起, Codex 以原生 skill / plugin 形态发现本仓库, 但 skill 主体内容 (`SKILL.md`, `stage_NN.md`, `competitions/*`) 仍为 harness-agnostic, 仅在以下方面有差异。
 
 ---
 
-## 0. 客户端发现路径与安装
+## 0. Codex V6 发现与安装
 
-各客户端的常见 skills 发现路径:
+Codex 推荐安装位置:
 
-| 客户端 | 用户级 | 项目级 | 入口 |
-|------|------|------|------|
-| Codex | `~/.agents/skills/mathmodel-skill/` | `<repo>/.agents/skills/mathmodel-skill/` | `$mathmodel-skill` / 自然语言 |
-| Claude Code | `~/.claude/skills/mathmodel-skill/` | `<repo>/.claude/skills/mathmodel-skill/` | `/mathmodel-skill` / 自动触发 |
-| Cursor | `~/.cursor/skills/mathmodel-skill/` 或 `~/.agents/skills/` | `<repo>/.cursor/skills/` 或 `.agents/skills/` | `/mathmodel-skill` / 自动触发 |
-| VS Code/Copilot | `~/.copilot/skills/`、`~/.claude/skills/` 或 `~/.agents/skills/` | `<repo>/.github/skills/`、`.claude/skills/` 或 `.agents/skills/` | `/skills` / 自动触发 |
-| OpenCode | `~/.config/opencode/skills/` 或 `~/.agents/skills/` | `<repo>/.opencode/skills/` 或 `.agents/skills/` | `skill` 工具 |
+| 场景 | 位置 |
+|------|------|
+| 用户级 skill | `$HOME/.agents/skills/mathmodel-skill/` |
+| 项目级 skill | `<repo>/.agents/skills/mathmodel-skill/` |
+| 项目级 instructions | `<repo>/AGENTS.md` |
+| plugin 分发 | `.codex-plugin/plugin.json` 声明 `skills: "./skills/"` |
 
-推荐从仓库根目录执行 `python scripts/install_skill.py --agent <client> --scope <project|user>`；它会复制 `SKILL.md`、`references/`、`competitions/`、`templates/`、`scripts/` 和 `config/`，并排除 Git 元数据、CI、测试与生成产物。也可直接 clone 到上表目录。
-
-所有客户端都优先依据 `SKILL.md` frontmatter 的 `name` / `description` 做发现。Codex 额外读取 `agents/openai.yaml` 和 `.codex-plugin/plugin.json`；Claude Code、Cursor、VS Code/Copilot 和 OpenCode 直接读取 skill 目录中的 `SKILL.md`。`AGENTS.md` 只作为 repo/workspace 指导文件，不是跨客户端的唯一入口。
+Codex 触发优先依赖 `SKILL.md` frontmatter 的 `description`; UI 展示与默认提示依赖 `agents/openai.yaml`。Plugin 模式通过 `skills/mathmodel-skill/SKILL.md` shim 进入根目录主 `SKILL.md`。`AGENTS.md` 只作为 repo/workspace 指导文件, 不应复制完整 workflow。
 
 ---
 
@@ -77,8 +74,6 @@ AskUserQuestion(questions=[{
 | 改文件 | `Edit(file_path=..., old_string=..., new_string=...)` | `apply_patch *** Update File` |
 | 查找 | `Glob` / `Grep` | `shell: rg ...` |
 
-Cursor、VS Code/Copilot、OpenCode 或其他客户端使用其原生文件工具；无论工具名称如何，所有 skill 内相对路径都从 `SKILL.md` 所在目录解析，用户产物都写到 `<cwd>/`。
-
 **路径协议保持不变**: 无论哪个 harness, `<cwd>/state/decision_log.json` 都表示当前项目根目录下的 `state/decision_log.json`。
 
 ---
@@ -128,9 +123,6 @@ python <skill>/scripts/render_paper.py --workspace paper_workspace/
 |---------|---------|
 | Claude Code | `SKILL.md` description 明确限定 CUMCM、MCM/ICM、电工杯及“数学建模竞赛论文”任务；仅说“建模”“A 题”或普通数据分析时不应触发 |
 | Codex | 安装到 `.agents/skills/` 后由同一 `SKILL.md` description 触发；`agents/openai.yaml` 提供 UI 展示和默认 prompt，原生选择 UI 不可用时才回退编号列表 |
-| Cursor | 安装到 `.cursor/skills/` 或 `.agents/skills/`；目录名和 frontmatter `name` 保持 `mathmodel-skill`，可用 slash command 或自动触发 |
-| VS Code/Copilot | 安装到 `.github/skills/`、`.claude/skills/` 或 `.agents/skills/`；通过 `/skills` 菜单检查发现结果 |
-| OpenCode | 安装到 `.opencode/skills/` 或 `.agents/skills/`；由 `skill` 工具按 ID 加载，引用文件相对 `SKILL.md` 所在目录解析 |
 | Plugin | `.codex-plugin/plugin.json` 声明 `skills: "./skills/"` 并随 GitHub Release 分发 |
 
 ---
@@ -145,11 +137,3 @@ python <skill>/scripts/render_paper.py --workspace paper_workspace/
 - [ ] Codex 安装包含 `agents/openai.yaml` 与 `.codex-plugin/plugin.json`
 
 任何一项不符 = 该 harness 适配未完成。
-
-官方目录说明：
-
-- [Codex / ChatGPT Skills](https://learn.chatgpt.com/docs/build-skills)
-- [Claude Code Skills](https://code.claude.com/docs/en/skills)
-- [Cursor Agent Skills](https://cursor.com/docs/skills)
-- [VS Code Agent Skills](https://code.visualstudio.com/docs/agent-customization/agent-skills)
-- [OpenCode Skills](https://opencode.ai/docs/skills)
