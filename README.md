@@ -1,6 +1,6 @@
 # mathmodel-skill
 
-[![Version](https://img.shields.io/badge/version-v7.3.3-blueviolet)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v7.3.4-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
@@ -9,6 +9,20 @@
 提供赛题和附件时默认进入 **Autopilot**，连续运行到可验证的交付包；只说“开始建模”或明确要求逐步协作时进入 **Guided Mode**。
 
 > 本项目协助团队组织和核验工作，不保证获奖，也不会在缺少题面、数据或真实运行结果时补造结论。
+
+## 公开版定位与贡献
+
+本仓库由 `xu-chenghao413` 维护。它不是任何上游仓库的官方分支，也不代表上游作者或 Nature Portfolio 的背书。
+
+本公开版以早期数学建模工作流为历史来源之一，吸收了独立安装的 `nature-*` skills 在证据链、统计、科研绘图、学术写作和审稿方面的通用方法，并进行了大幅重构。`xu-chenghao413` 在本公开版中负责并持续维护：
+
+- Autopilot / Guided 双模式、10 阶段状态机、可恢复的 `decision_log.json` 和跨 harness 接力协议；
+- CUMCM、MCM/ICM、电工杯三类竞赛路由、规则基线、评分覆盖层、模板装配和提交前合规门；
+- 真实代码求解、统计与稳健性检查、section-level 回修、PDF/LaTeX QA、版本化交付和回归测试；
+- 公开版的 clean-room 文档、原创装配模板、来源边界、AI 使用披露和隐私/第三方材料隔离策略；
+- 将上述模块整合为可安装的 Codex skill、plugin shim，以及适配 Claude Code 的同一套工作流入口。
+
+因此，当前版本是一个有明确新增实现和重构贡献的衍生公开版，而不是对任何单一 skill 的原样转载。历史文件若保留上游版权通知，详见 [`LICENSE`](./LICENSE)、[`PROVENANCE.md`](./PROVENANCE.md) 和 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。
 
 ## 主要能力
 
@@ -117,11 +131,35 @@ Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https:
 
 ## 设计影响与可选集成
 
-本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.3.3 公开版只保留独立编写的实现和一般性方法，不打包这些外部 skills 的源码、文档或资产。
+本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.3.4 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
 
-`nature-*` 在本项目中只是可选能力路由名称，不表示与 Springer Nature、相关 skill 作者、OpenAI 或 Anthropic 存在隶属、认可或联合发布关系。各外部 skill 继续适用其自己的许可证和使用条件。
+历史来源之一是 [handsomeZR-netizen/mathmodel-skill](https://github.com/handsomeZR-netizen/mathmodel-skill)。其 MIT 通知适用于相应历史部分；本公开版的新增和修改由 `xu-chenghao413` 维护。该链接用于来源和许可证核对，不表示本仓库属于原仓库所有者。
+
+`nature-*` 在本项目中只是可选能力路由名称，不表示与 Springer Nature、相关 skill 作者、OpenAI 或 Anthropic 存在隶属、认可或联合发布关系。每个外部 skill 继续适用其自己的许可证和使用条件。
 
 署名说明不是第三方代码的使用授权；后续若要引入外部实现，必须先记录来源、版本和兼容许可证。
+
+## 可选安装 `nature-*` skills
+
+核心数学建模流程不依赖 `nature-*`。需要文献检索、Nature 风格写作、统计、科研绘图、全文阅读或审稿能力时，请从**你有权使用的来源**单独安装对应 skill；不要从本仓库复制它们的 `SKILL.md`、`references/`、`static/` 或 `assets/`。
+
+如果 skill 发布在公开或你有权限访问的 GitHub 仓库，可使用 Codex 自带的 skill-installer：
+
+```bash
+python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo <owner>/<repo> \
+  --path <path/to/nature-writing>
+```
+
+Windows PowerShell：
+
+```powershell
+py "$env:USERPROFILE\.codex\skills\.system\skill-installer\scripts\install-skill-from-github.py" `
+  --repo <owner>/<repo> `
+  --path <path/to/nature-writing>
+```
+
+把 `<owner>/<repo>` 和 `<path/to/nature-writing>` 替换为实际、已获授权的来源；其他 `nature-*` skill（如 `nature-figure`、`nature-statistics`、`nature-reader`、`nature-reviewer`）按同样方式安装。若拿到的是合法的本地 skill 包，只需将包含 `SKILL.md` 的完整目录放入 `.codex/skills/` 或 `.agents/skills/`，然后重新启动 Codex。安装后的外部 skill 不会改变本仓库的许可证，也不会自动成为本项目的组成部分。
 
 ## 开发与验证
 

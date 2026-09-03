@@ -13,6 +13,8 @@ This file defines what may enter the public repository. It is a maintenance reco
 | `phrase_bank.md` and other phrase banks | Maintainer-authored generic writing scaffolds | Must be clean-room wording; do not reconstruct or paraphrase identifiable source sentences |
 | Competition rule baselines | Links and maintainer summaries of official pages | Record URL and verification date; official source controls |
 
+The public-release contribution boundary and the historical `mathmodel-skill` lineage are documented in [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md). Separately installed `nature-*` packages remain external dependencies; this repository records their conceptual influence and runtime routing only, not their source or redistribution rights.
+
 ## Material excluded from publication
 
 - Source-paper PDFs, OCR/text dumps, screenshots and paid downloads.

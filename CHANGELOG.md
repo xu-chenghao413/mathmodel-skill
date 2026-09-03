@@ -2,6 +2,10 @@
 
 All notable public changes are recorded here.
 
+## 7.3.4
+
+- Reworked the README to foreground `xu-chenghao413`'s public-release contributions, upstream attribution boundaries, and authorized `nature-*` installation routes.
+
 ## 7.3.3
 
 - Clarified mixed historical/public-release copyright attribution without removing the original MIT notice.

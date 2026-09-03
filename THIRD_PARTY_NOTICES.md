@@ -6,6 +6,8 @@ The root MIT License applies only to original code, documentation, and templates
 
 The public release preserves the historical MIT notice for `handsomeZR-netizen` where earlier development snapshots or files carried that attribution. The current maintainer account `xu-chenghao413` owns the public-release additions, cleanup work, and subsequent modifications made in this repository. This notice does not claim a transfer of copyright for historical portions; contributors and commit metadata remain visible in Git history.
 
+The historical workflow lineage can be reviewed in [`handsomeZR-netizen/mathmodel-skill`](https://github.com/handsomeZR-netizen/mathmodel-skill). Its MIT license permits modification and redistribution provided that the original notice and license text remain with the covered portions. This repository is a substantial derivative and integration work, not an official fork or endorsement by that repository's owner.
+
 ## Excluded CUMCMThesis material
 
 This release does not include or license any source code, documentation, examples, or binary files from [`latexstudio/CUMCMThesis`](https://github.com/latexstudio/CUMCMThesis).
@@ -19,6 +21,8 @@ Historical copies of `latexstudio/CUMCMThesis` were removed from maintained bran
 The workflow was informed by general mathematical-modeling practices and by experience using separately installed `mcm` and `nature-*` skills. This repository does not bundle their source code, documentation, or assets. Optional interoperability is performed at runtime only when a separately installed skill is available, and that skill remains subject to its own license.
 
 The names `Nature` and `nature-*` are used only to identify optional local skill packages. This project is not affiliated with or endorsed by Springer Nature, the authors of those skills, OpenAI, or Anthropic.
+
+No public redistribution source for the installed `nature-*` packages is asserted here. Install them only from a repository or package whose license and access rights you have verified. The installation instructions in the README intentionally use placeholders instead of inventing a download URL.
 
 ## Runtime dependencies
 
