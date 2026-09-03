@@ -3,7 +3,7 @@ name: mathmodel-skill
 description: "输入 CUMCM、MCM/ICM 或电工杯赛题后，自动完成题面解析、建模、真实代码求解、统计与稳健性、科研制图、引用核验、竞赛论文/PDF、互盲终审和可复现交付包；也支持逐阶段 Guided 协作。Use for 建模、数模、竞赛论文、模型选择、灵敏度分析、摘要/终稿审核，或用户要求从赛题一键输出交付物。Do not use for ordinary academic papers unrelated to modeling contests."
 ---
 
-# mathmodel-skill — 数学建模三竞赛通用 Skill (v7.3.4)
+# mathmodel-skill — 数学建模三竞赛通用 Skill (v7.3.5)
 
 10 阶段把"3-4 天打 1 篇竞赛论文"工程化。用户直接给出赛题时默认 **Autopilot 一键交付**：自动完成读题、建模、代码求解、统计/制图、引用、论文、PDF 视觉 QA 与交付清单；只说“开始建模”时保留编号问答式 Guided Mode。每阶段产出经过 rubric 自评、section-level patch、跨阶段回检与终局互盲评审。
 
@@ -33,7 +33,7 @@ Codex 优先按 skill 目录发现本文件:
 
 ## Harness 兼容 (Claude Code / Codex)
 
-本 skill v7.3.4 以 Codex Skills 为一等入口, 同时保持 harness-agnostic 设计:
+本 skill v7.3.5 以 Codex Skills 为一等入口, 同时保持 harness-agnostic 设计:
 
 | harness | 入口文件 | 用户交互工具 | 状态文件 |
 |---------|---------|-------------|---------|

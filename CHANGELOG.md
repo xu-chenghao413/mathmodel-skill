@@ -2,6 +2,10 @@
 
 All notable public changes are recorded here.
 
+## 7.3.5
+
+- Clarified that the public-release contributor listing covers only `xu-chenghao413`'s additions, refactoring, cleanup, tests, and release maintenance, while historical authors remain governed by the license and provenance records.
+
 ## 7.3.4
 
 - Reworked the README to foreground `xu-chenghao413`'s public-release contributions, upstream attribution boundaries, and authorized `nature-*` installation routes.

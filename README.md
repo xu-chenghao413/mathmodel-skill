@@ -1,6 +1,6 @@
 # mathmodel-skill
 
-[![Version](https://img.shields.io/badge/version-v7.3.4-blueviolet)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v7.3.5-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
@@ -13,6 +13,12 @@
 ## 公开版定位与贡献
 
 本仓库由 `xu-chenghao413` 维护。它不是任何上游仓库的官方分支，也不代表上游作者或 Nature Portfolio 的背书。
+
+### 公开版贡献者
+
+- `xu-chenghao413`：公开版当前维护者；负责公开版新增实现、重构、清理、测试和发布维护。
+
+这里的“贡献者”仅指本公开版新增、重构和维护范围，不替代历史许可证、来源说明或 Git 提交记录中的作者信息。
 
 本公开版以早期数学建模工作流为历史来源之一，吸收了独立安装的 `nature-*` skills 在证据链、统计、科研绘图、学术写作和审稿方面的通用方法，并进行了大幅重构。`xu-chenghao413` 在本公开版中负责并持续维护：
 
@@ -131,7 +137,7 @@ Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https:
 
 ## 设计影响与可选集成
 
-本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.3.4 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
+本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.3.5 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
 
 历史来源之一是 [handsomeZR-netizen/mathmodel-skill](https://github.com/handsomeZR-netizen/mathmodel-skill)。其 MIT 通知适用于相应历史部分；本公开版的新增和修改由 `xu-chenghao413` 维护。该链接用于来源和许可证核对，不表示本仓库属于原仓库所有者。
 
