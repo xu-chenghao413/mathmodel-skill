@@ -1,7 +1,9 @@
 # mathmodel-skill
 
-[![Version](https://img.shields.io/badge/version-v7.3.5-blueviolet)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v7.4.0-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-cross--agent-10A37F)](https://agentskills.io/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](./templates/shared/requirements.txt)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
 面向 CUMCM、MCM/ICM 与电工杯的端到端数学建模竞赛工作流。它把赛题解析、模型选择、真实代码求解、统计与稳健性、图表、论文、合规检查和最终交付组织成可恢复的 10 个阶段。
@@ -9,6 +11,18 @@
 提供赛题和附件时默认进入 **Autopilot**，连续运行到可验证的交付包；只说“开始建模”或明确要求逐步协作时进入 **Guided Mode**。
 
 > 本项目协助团队组织和核验工作，不保证获奖，也不会在缺少题面、数据或真实运行结果时补造结论。
+
+> **一句话定位：** 把“读题 → 建模 → 真实求解 → 统计稳健性 → 论文写作 → 盲审 → 可复现交付”固化为一个跨 Agent、可恢复、可审计的工程化工作流。
+
+## 为什么值得关注
+
+这不是一组一次性提示词，而是一个带有状态、脚本、模板、规则包和回归测试的 Agent Skill：
+
+- **状态化**：所有关键决策、评分、阻塞项和产物定位写入 `state/decision_log.json`，会话中断后可恢复。
+- **证据化**：每个子问题都要求形成“数据 → 预处理 → 模型 → 结果 → 回题结论”的链路，不用模型名称代替真实计算。
+- **可验证**：真实 Python 求解、统计/灵敏度、算法声明一致性、LaTeX/PDF QA 和最终交付机械门彼此衔接。
+- **跨 Agent**：核心入口是标准 `SKILL.md` 目录，可被 Codex、Claude Code、Cursor、VS Code/Copilot、OpenCode 或其他兼容 Agent Skills 的客户端加载。
+- **可审计**：保留 provenance、AI 使用记录、匿名检查、引用核验和版本化 delivery manifest，便于团队复盘和面试展示。
 
 ## 公开版定位与贡献
 
@@ -26,7 +40,7 @@
 - CUMCM、MCM/ICM、电工杯三类竞赛路由、规则基线、评分覆盖层、模板装配和提交前合规门；
 - 真实代码求解、统计与稳健性检查、section-level 回修、PDF/LaTeX QA、版本化交付和回归测试；
 - 公开版的 clean-room 文档、原创装配模板、来源边界、AI 使用披露和隐私/第三方材料隔离策略；
-- 将上述模块整合为可安装的 Codex skill、plugin shim，以及适配 Claude Code 的同一套工作流入口。
+- 将上述模块整合为可安装的跨 Agent Skill，并保留 Codex plugin shim、Claude Code/Cursor/OpenCode 目录适配和同一套工作流入口。
 
 因此，当前版本是一个有明确新增实现和重构贡献的衍生公开版，而不是对任何单一 skill 的原样转载。历史文件若保留上游版权通知，详见 [`LICENSE`](./LICENSE)、[`PROVENANCE.md`](./PROVENANCE.md) 和 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。
 
@@ -39,6 +53,30 @@
 - CUMCM AI 使用记录、匿名检查、PDF 视觉 QA、交付清单和版本化打包。
 - 可选调用分别安装的文献、统计、科研绘图、写作和审稿 skills；缺少这些扩展时核心流程仍可运行。
 
+## 工程架构
+
+```mermaid
+flowchart LR
+    A[题面与附件] --> B[Source packet<br/>哈希与元数据]
+    B --> C[Stage 0–9<br/>10 阶段状态机]
+    C --> D[真实求解<br/>统计/稳健性/图表]
+    D --> E[论文与 PDF<br/>引用/合规]
+    E --> F[QA + manifest<br/>版本化交付]
+    C <--> G[Autopilot / Guided]
+    C <--> H[Codex / Claude Code / Cursor / VS Code / OpenCode]
+```
+
+### 核心模块与可观察产物
+
+| 工程问题 | 实现 | 可检查产物 |
+|---|---|---|
+| 长流程容易丢上下文 | `decision_log.json` + resume 协议 | `state/decision_log.json` |
+| 模型选择缺少证据 | 候选模型比较、拒绝记录、反事实反馈 | Stage 3 评分与 rejection log |
+| “写了模型但没跑代码” | 真实代码求解和结果回题硬门 | `src/`、`results/`、QA 摘要 |
+| 论文超页或格式漂移 | 自适应页预算、section marker、PDF 结构检查 | `analysis/page_budget.json`、`paper_output/` |
+| AI 产物难以复核 | 关键事件级 AI 台账和人工核验字段 | `qa/ai_usage_log.json`、披露 PDF |
+| 交付物散落且不可复现 | 单文件夹打包、哈希、manifest、阻塞状态 | `delivery/<version>/` |
+
 ## 支持范围
 
 | 竞赛 | 默认时长 | 语言 | LaTeX 基线 | 经验数据状态 |
@@ -49,38 +87,97 @@
 
 当届题面、官方通知和用户明确要求始终优先于仓库内的历史基线。
 
-## 60 秒开始
+## 安装与快速开始
 
-### Codex skill
+本项目遵循以 `SKILL.md` 为入口的 Agent Skills 目录约定。完整复制 skill 目录很重要：`SKILL.md` 会按需读取 `references/`、`competitions/`、`templates/` 和 `scripts/`，只复制一个 Markdown 文件会失去关键能力。
+
+### 客户端兼容矩阵
+
+| Agent / 客户端 | 项目级目录 | 用户级目录 | 触发方式 |
+|---|---|---|---|
+| Codex CLI / Codex app | `.agents/skills/mathmodel-skill/` | `~/.agents/skills/mathmodel-skill/` | `$mathmodel-skill` 或自然语言 |
+| Claude Code | `.claude/skills/mathmodel-skill/` | `~/.claude/skills/mathmodel-skill/` | `/mathmodel-skill` 或自动触发 |
+| Cursor | `.cursor/skills/mathmodel-skill/` 或 `.agents/skills/` | `~/.cursor/skills/` 或 `~/.agents/skills/` | `/mathmodel-skill` 或 Agent 自动选择 |
+| VS Code + GitHub Copilot | `.github/skills/mathmodel-skill/`、`.claude/skills/` 或 `.agents/skills/` | `~/.copilot/skills/`、`~/.claude/skills/` 或 `~/.agents/skills/` | `/skills` 菜单或自动选择 |
+| OpenCode | `.opencode/skills/mathmodel-skill/` 或 `.agents/skills/` | `~/.config/opencode/skills/` 或 `~/.agents/skills/` | `skill` 工具或自然语言 |
+| 其他兼容客户端 | 该客户端的项目 skills 目录 | 该客户端的用户 skills 目录 | 读取 `SKILL.md` 后按其命令约定触发 |
+
+上述目录是客户端的发现位置，不是本项目自定义的强制配置。不同客户端的官方说明： [Codex / ChatGPT Skills](https://learn.chatgpt.com/docs/build-skills)、[Claude Code Skills](https://code.claude.com/docs/en/skills)、[Cursor Agent Skills](https://cursor.com/docs/skills)、[VS Code Agent Skills](https://code.visualstudio.com/docs/agent-customization/agent-skills)、[OpenCode Skills](https://opencode.ai/docs/skills)。
+
+### 方式 A：用跨 Agent 安装脚本（推荐）
+
+先把仓库克隆到一个独立的 checkout，再让脚本把运行时 payload 安全复制到目标项目或用户目录。脚本默认拒绝覆盖已有目录，并排除 `.git`、CI、测试和生成中的用户工作区：
 
 ```bash
-git clone https://github.com/xu-chenghao413/mathmodel-skill.git ~/.agents/skills/mathmodel-skill
-python -m pip install -r ~/.agents/skills/mathmodel-skill/templates/shared/requirements.txt
+git clone https://github.com/xu-chenghao413/mathmodel-skill.git /tmp/mathmodel-skill
 cd <your-team-workspace>
-codex
+
+# 项目级安装
+python /tmp/mathmodel-skill/scripts/install_skill.py --source /tmp/mathmodel-skill --agent claude --scope project
+python /tmp/mathmodel-skill/scripts/install_skill.py --source /tmp/mathmodel-skill --agent cursor --scope project
+python /tmp/mathmodel-skill/scripts/install_skill.py --source /tmp/mathmodel-skill --agent opencode --scope project
+
+# 用户级安装
+python /tmp/mathmodel-skill/scripts/install_skill.py --source /tmp/mathmodel-skill --agent codex --scope user
 ```
 
-然后提供赛题和附件，并说：
-
-```text
-使用 $mathmodel-skill 完成这道赛题，生成可验证、可复现的最终交付包。
-```
-
-项目级安装：
+也可以显式指定目录：
 
 ```bash
-mkdir -p .agents/skills
-git clone https://github.com/xu-chenghao413/mathmodel-skill.git .agents/skills/mathmodel-skill
+python /tmp/mathmodel-skill/scripts/install_skill.py \
+  --source /tmp/mathmodel-skill \
+  --destination /path/to/your-agent/skills/mathmodel-skill
 ```
 
-Windows PowerShell 可将目标目录换成：
+Windows PowerShell：
 
 ```powershell
-git clone https://github.com/xu-chenghao413/mathmodel-skill.git "$HOME/.agents/skills/mathmodel-skill"
-py -m pip install -r "$HOME/.agents/skills/mathmodel-skill/templates/shared/requirements.txt"
+py "C:\path\to\mathmodel-skill\scripts\install_skill.py" `
+  --source "C:\path\to\mathmodel-skill" `
+  --agent claude --scope project
+py "C:\path\to\mathmodel-skill\scripts\install_skill.py" `
+  --source "C:\path\to\mathmodel-skill" `
+  --agent copilot --scope user
 ```
 
-仓库同时保留 Claude Code 的 `SKILL.md` 入口和跨 harness 状态协议。状态默认写入当前赛题工作区的 `state/decision_log.json`，不会写入本 skill 仓库。
+### 方式 B：直接 clone 到客户端目录
+
+把下面的 `<skill-root>` 替换成上表中某个客户端的项目级或用户级路径：
+
+```bash
+git clone https://github.com/xu-chenghao413/mathmodel-skill.git <skill-root>/mathmodel-skill
+python -m pip install -r <skill-root>/mathmodel-skill/templates/shared/requirements.txt
+```
+
+例如 Claude Code 项目级安装：
+
+```bash
+mkdir -p .claude/skills
+git clone https://github.com/xu-chenghao413/mathmodel-skill.git .claude/skills/mathmodel-skill
+```
+
+例如 Cursor、VS Code/Copilot 和 OpenCode 项目级安装：
+
+```bash
+git clone https://github.com/xu-chenghao413/mathmodel-skill.git .cursor/skills/mathmodel-skill
+# 或 .github/skills/mathmodel-skill
+# 或 .opencode/skills/mathmodel-skill
+```
+
+安装后重新加载客户端（部分客户端会自动发现新目录），然后提供赛题和附件：
+
+```text
+请使用 mathmodel-skill 处理这道赛题，保留真实代码、统计稳健性、引用核验和最终交付清单。
+```
+
+### 运行环境
+
+- Python 3.10+；依赖见 [`templates/shared/requirements.txt`](./templates/shared/requirements.txt)。
+- 只做题面解析、建模和代码求解时，Python 依赖通常足够。
+- 需要论文/PDF 时，再安装 Pandoc、XeLaTeX（CUMCM/电工杯）或 pdfLaTeX（MCM/ICM）；`python scripts/doctor.py` 会报告缺少的工具。
+- 如果客户端没有原生问答 UI，skill 会退回 Markdown 编号选项；用户不需要手动编辑 JSON。
+
+状态默认写入当前赛题工作区的 `state/decision_log.json`，不会写入 skill 安装目录，因此同一个工作区可以在不同 Agent 之间接力。
 
 ## 工作流
 
@@ -97,6 +194,48 @@ py -m pip install -r "$HOME/.agents/skills/mathmodel-skill/templates/shared/requ
 
 详细执行协议见 [`SKILL.md`](./SKILL.md)。
 
+## 使用示例
+
+直接给出题面和附件：
+
+```text
+这是 CUMCM 2026 B 题和 3 个附件。请从题面解析开始，自动完成建模、真实代码求解、统计稳健性、论文/PDF、AI 使用详情和最终交付包；所有关键决策写入 state/decision_log.json。
+```
+
+中途切换竞赛或协作方式：
+
+```text
+把当前项目切换到 MCM/ICM，并从 decision_log.json 恢复；只精修 Stage 6 的稳健性分析，不要重写已确认的主模型。
+```
+
+已有论文做终审：
+
+```text
+请审计这份数学建模论文的模型—代码—结果一致性、引用、页数、匿名和 PDF 结构；只提出证据支持的最小修改。
+```
+
+典型输出包括：题面 source packet、候选模型比较、可运行求解代码、统计与敏感性结果、科研图件、分节论文、引用审计、互盲审稿报告和一个带哈希的版本化交付目录。
+
+## 一次运行会得到什么
+
+Skill 会在用户的赛题工作区生成可复核的目录，而不是把结果写回 skill 安装目录：
+
+```text
+<team-workspace>/
+├── input/                 # 题面和附件索引
+├── state/decision_log.json # 跨 Agent 的唯一状态源
+├── analysis/              # 选题、页预算、创新证据账本
+├── src/                   # 可执行求解代码与 run_all 入口
+├── data_raw/ data_processed/
+├── results/ figures/      # 真实运行结果和科研图件
+├── paper_workspace/       # 分节 Markdown / BibTeX / AI 披露
+├── paper_output/          # LaTeX、PDF、编译日志
+├── qa/                    # 复现、统计、引用、视觉和交付审计
+└── delivery/<version>/    # 最终版本化交付包与 manifest
+```
+
+默认情况下，已有文件不会被初始化脚本覆盖；存在人工确认 blocker 时，系统会保留候选交付包并明确标记 `NOT_SUBMISSION_READY.md`，而不是伪装成可提交终稿。
+
 ## CUMCM 官方规则与维护者策略
 
 仓库明确区分两层约束：
@@ -109,17 +248,17 @@ py -m pip install -r "$HOME/.agents/skills/mathmodel-skill/templates/shared/requ
 ## 目录结构
 
 ```text
-.codex-plugin/plugin.json       # plugin manifest
-agents/openai.yaml              # skill UI 元数据
-skills/mathmodel-skill/         # plugin 入口 shim
-SKILL.md                        # 主工作流入口
+.codex-plugin/plugin.json       # Codex plugin manifest（可选）
+agents/openai.yaml              # Codex UI 元数据（可选）
+skills/mathmodel-skill/         # Codex plugin 入口 shim（可选）
+SKILL.md                        # 跨 Agent 的主工作流入口
 AGENTS.md                       # 项目级 harness 说明
 competitions/<comp>/            # 竞赛规则、模板和经验层
 references/                     # 按阶段懒加载的工作流合同
-scripts/                        # 初始化、评分、渲染、验证和打包工具
-templates/latex/                # 本项目原创 LaTeX 装配模板
+scripts/                        # 初始化、安装、评分、渲染、验证和打包工具
+templates/latex/                # 本项目原创/重构的 LaTeX 装配模板
 templates/shared/               # 状态和交付模板
-tests/                          # 自动化测试
+tests/                          # 自动化回归测试
 ```
 
 Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https://learn.chatgpt.com/docs/build-skills) 和 [Plugin 打包文档](https://developers.openai.com/plugins/build/plugins)。
@@ -137,7 +276,7 @@ Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https:
 
 ## 设计影响与可选集成
 
-本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.3.5 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
+本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.4.0 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
 
 历史来源之一是 [handsomeZR-netizen/mathmodel-skill](https://github.com/handsomeZR-netizen/mathmodel-skill)。其 MIT 通知适用于相应历史部分；本公开版的新增和修改由 `xu-chenghao413` 维护。该链接用于来源和许可证核对，不表示本仓库属于原仓库所有者。
 
@@ -165,7 +304,25 @@ py "$env:USERPROFILE\.codex\skills\.system\skill-installer\scripts\install-skill
   --path <path/to/nature-writing>
 ```
 
-把 `<owner>/<repo>` 和 `<path/to/nature-writing>` 替换为实际、已获授权的来源；其他 `nature-*` skill（如 `nature-figure`、`nature-statistics`、`nature-reader`、`nature-reviewer`）按同样方式安装。若拿到的是合法的本地 skill 包，只需将包含 `SKILL.md` 的完整目录放入 `.codex/skills/` 或 `.agents/skills/`，然后重新启动 Codex。安装后的外部 skill 不会改变本仓库的许可证，也不会自动成为本项目的组成部分。
+把 `<owner>/<repo>` 和 `<path/to/nature-writing>` 替换为实际、已获授权的来源；其他 `nature-*` skill（如 `nature-figure`、`nature-statistics`、`nature-reader`、`nature-reviewer`）按同样方式安装。若拿到的是合法的本地 skill 包，只需将包含 `SKILL.md` 的完整目录放入目标客户端支持的 skills 目录（例如 `.agents/skills/`、`.claude/skills/`、`.cursor/skills/`、`.github/skills/` 或 `.opencode/skills/`），然后重新加载客户端。安装后的外部 skill 不会改变本仓库的许可证，也不会自动成为本项目的组成部分。
+
+## 面试与简历亮点
+
+### 中文简历描述
+
+> 主导设计并开源一个跨 Agent 的数学建模竞赛工作流 Skill，将 CUMCM、MCM/ICM 和电工杯的“读题—建模—真实求解—统计稳健性—论文—盲审—交付”固化为 10 阶段可恢复状态机；实现 Autopilot/Guided 双模式、`decision_log.json` 跨会话接力、自适应页预算、算法声明一致性审计、AI 披露、PDF QA、版本化交付和 CI 回归测试，并兼容 Codex、Claude Code、Cursor、VS Code/Copilot 与 OpenCode。
+
+### English résumé bullet
+
+> Led the redesign and open-source release of a cross-agent mathematical-modeling workflow skill for CUMCM, MCM/ICM, and Diangong Cup. Built a recoverable 10-stage state machine with Autopilot/Guided modes, persistent decision logs, executable model pipelines, robustness checks, adaptive paper budgeting, algorithm-claim consistency audits, AI-use disclosure, PDF QA, versioned delivery manifests, and CI regression tests.
+
+### 面试时可以展开的工程决策
+
+1. **为什么用状态机而不是长 prompt？** 把阶段边界、输入输出和阻塞状态落盘，解决长任务中断、重复劳动和隐式上下文丢失。
+2. **如何证明 Agent 没有“编结果”？** 强制真实代码、结果文件、算法声明和日志互相对齐；`validate_delivery.py` 在机械门失败时拒绝标记为 ready。
+3. **如何控制上下文和成本？** 按阶段懒加载 references，L1→L2→L3/L4 分层反馈，section-level patch 替代整篇重写。
+4. **如何做跨平台兼容？** 保持 `SKILL.md` 与相对路径自包含，把 Claude Code 的问答工具、Codex 的编号选项和其他 Agent 的 fallback 行为隔离在 harness 适配层。
+5. **如何处理开源和第三方边界？** 外部 Nature skills 只做可选运行时路由，不打包其源码/资产；历史来源、许可证、聚合统计和隐私材料均有独立 provenance 记录。
 
 ## 开发与验证
 
@@ -174,6 +331,8 @@ python -m unittest discover -s tests -v
 python scripts/doctor.py
 ```
 
+GitHub Actions 在每次 push / pull request 上用 Python 3.10 和 3.12 执行源码编译、90 项回归测试，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
+
 提交前还应检查：
 
 - 版本号在 README、`SKILL.md`、`AGENTS.md` 与 plugin manifest 中一致；
@@ -181,6 +340,13 @@ python scripts/doctor.py
 - 所有 JSON/YAML 可解析，测试全绿，示例命令能在干净环境运行。
 
 贡献方式见 [`CONTRIBUTING.md`](./CONTRIBUTING.md)，安全问题见 [`SECURITY.md`](./SECURITY.md)，版本变化见 [`CHANGELOG.md`](./CHANGELOG.md)。
+
+## 边界与限制
+
+- 竞赛组委会当届正式通知、赛题包和用户明确要求优先于仓库内的历史规则基线。
+- 机械校验通过不等于科学结论正确；关键假设、数据处理、统计解释、图件和最终匿名状态仍需人工确认。
+- 缺少题面、数据、编译器或外部 skill 时，系统会报告 blocker 并降级，不会补造结果、引用或实验事实。
+- 外部 `nature-*`、规则、论文、数据集、字体、LaTeX 类和商标不因本仓库采用 MIT 而自动获得再分发许可。
 
 ## License
 

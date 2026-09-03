@@ -1,8 +1,9 @@
-# AGENTS.md — mathmodel-skill v7.3.5 (Codex 入口 / Project Instructions)
+# AGENTS.md — mathmodel-skill v7.4.0 (跨 Agent / Project Instructions)
 
-> 本文件是 **Codex** (以及任何遵循 `AGENTS.md` 约定的 agentic CLI) 的项目级入口。
+> 本文件是 **Codex** 及遵循 `AGENTS.md` 约定的 agentic CLI 的项目级适配层。
 > 真正的工作流定义在 `SKILL.md`，请把它当作主指令读取。本文件只解释 **harness 差异**。
-> V7 推荐把本仓库作为 Codex skill 安装到 `$HOME/.agents/skills/mathmodel-skill/` 或项目 `.agents/skills/mathmodel-skill/`; 本文件用于 repo/workspace 级补充说明。
+> 其他客户端直接加载 `SKILL.md` 和相邻资源目录即可；本文件不是跨 Agent 的唯一入口。
+> 推荐把本仓库作为 Agent Skill 安装到对应客户端的 skills 目录；Codex 常用 `$HOME/.agents/skills/mathmodel-skill/` 或项目 `.agents/skills/mathmodel-skill/`。
 
 ---
 
@@ -14,17 +15,17 @@
 
 ---
 
-## Codex 与 Claude Code 的差异 (你只需读这一段)
+## 客户端差异 (你只需读这一段)
 
-| 能力 | Claude Code | Codex | 你该怎么做 |
-|------|-------------|-----------|----------|
-| Skill 发现 | `SKILL.md` | `SKILL.md` + `agents/openai.yaml` + 可选 plugin | 首先读 `SKILL.md`, 再按需读 references |
-| 项目指导 | 无统一文件 | `AGENTS.md` 层级 instructions | 本文件只做 Codex shim, 不复制完整 workflow |
-| 用户交互 | `AskUserQuestion` 工具弹出选项 UI | 通常无原生选项 UI | **用 markdown 编号列表替代**, 见下方"问答式协议" |
-| 文件读写 | `Read` / `Edit` / `Write` | `apply_patch` / shell `cat` | 用 Codex 原生工具, 但路径协议不变 |
-| Shell | `Bash` (有 sandbox) | `shell` | 一致, 仅工具名不同 |
-| 子代理 | `Agent` (subagents) | `codex` 子任务 | 复杂分支可分派子任务跑评分/校验 |
-| 持久 state | `cwd/state/decision_log.json` | 同 | **完全一致**, 跨 harness 互通 |
+| 能力 | Claude Code | Codex | Cursor / VS Code / OpenCode | 你该怎么做 |
+|------|-------------|-----------|-------------------------------|----------|
+| Skill 发现 | `.claude/skills/` | `.agents/skills/` + `agents/openai.yaml`/plugin | 客户端各自的 skills 目录 | 首先读 `SKILL.md`, 再按需读 references |
+| 项目指导 | 通常不依赖 `AGENTS.md` | `AGENTS.md` 层级 instructions | 以客户端官方约定为准 | 本文件只做可选适配层, 不复制完整 workflow |
+| 用户交互 | `AskUserQuestion` 工具弹出选项 UI | markdown 编号列表 | 原生 UI；没有时用编号列表 | 保持决策字段和提问语义一致 |
+| 文件读写 | `Read` / `Edit` / `Write` | `apply_patch` / shell `cat` | 客户端原生文件工具 | 路径协议不变 |
+| Shell | `Bash` (有 sandbox) | `shell` | 客户端 shell | 脚本调用保持一致 |
+| 子代理 | `Agent` (subagents) | `codex` 子任务 | 由客户端能力决定 | 无子代理时串行并记录 |
+| 持久 state | `cwd/state/decision_log.json` | 同 | 同 | **完全一致**, 跨 harness 互通 |
 
 **核心保证**: `cwd/state/decision_log.json` 是 **harness-agnostic** 的。一队人 day 1 在 Codex 上跑 stage 0-2, day 2 切回 Claude Code 继续 stage 3+, 不会丢状态。
 

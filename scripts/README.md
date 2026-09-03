@@ -2,6 +2,24 @@
 
 本目录脚本按"运行时" vs "离线一次性"分两类。
 
+## `install_skill.py` — 跨 Agent 安装器
+
+从公开版 checkout 安全复制运行时 payload 到 Codex、Claude Code、Cursor、VS Code/Copilot 或 OpenCode 的 skill 目录。默认拒绝覆盖已有目录；升级已有 checkout 时请在目标目录执行 `git pull`，不要让安装器静默覆盖本地改动。
+
+```bash
+python /path/to/mathmodel-skill/scripts/install_skill.py \
+  --source /path/to/mathmodel-skill \
+  --agent claude --scope project
+python /path/to/mathmodel-skill/scripts/install_skill.py \
+  --source /path/to/mathmodel-skill \
+  --agent codex --scope user
+python /path/to/mathmodel-skill/scripts/install_skill.py \
+  --source /path/to/mathmodel-skill \
+  --destination /path/to/skills/mathmodel-skill
+```
+
+安装器会保留 `SKILL.md`、`references/`、`competitions/`、`templates/`、`scripts/` 和 `config/`，排除 `.git`、CI、测试和生成中的用户工作区；相对路径仍以 skill 根目录为基准。
+
 ---
 
 ## 运行时脚本 (各 stage 调用)

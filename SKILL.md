@@ -1,9 +1,10 @@
 ---
 name: mathmodel-skill
-description: "输入 CUMCM、MCM/ICM 或电工杯赛题后，自动完成题面解析、建模、真实代码求解、统计与稳健性、科研制图、引用核验、竞赛论文/PDF、互盲终审和可复现交付包；也支持逐阶段 Guided 协作。Use for 建模、数模、竞赛论文、模型选择、灵敏度分析、摘要/终稿审核，或用户要求从赛题一键输出交付物。Do not use for ordinary academic papers unrelated to modeling contests."
+description: "Portable Agent Skills workflow for CUMCM, MCM/ICM, and Diangong Cup: parse problems, build and run real models, validate statistics and robustness, generate figures and competition papers/PDFs, audit citations, perform blind review, and package reproducible delivery artifacts. Supports Autopilot and Guided collaboration across Codex, Claude Code, Cursor, VS Code/Copilot, OpenCode, and compatible clients. Use for 数学建模竞赛、竞赛论文、模型选择、灵敏度分析、摘要/终稿审核或从赛题一键输出交付物；Do not use for ordinary academic papers unrelated to modeling contests."
+license: MIT
 ---
 
-# mathmodel-skill — 数学建模三竞赛通用 Skill (v7.3.5)
+# mathmodel-skill — 数学建模三竞赛通用 Skill (v7.4.0)
 
 10 阶段把"3-4 天打 1 篇竞赛论文"工程化。用户直接给出赛题时默认 **Autopilot 一键交付**：自动完成读题、建模、代码求解、统计/制图、引用、论文、PDF 视觉 QA 与交付清单；只说“开始建模”时保留编号问答式 Guided Mode。每阶段产出经过 rubric 自评、section-level patch、跨阶段回检与终局互盲评审。
 
@@ -11,36 +12,50 @@ description: "输入 CUMCM、MCM/ICM 或电工杯赛题后，自动完成题面�
 
 **v7.3 更新**: 已有论文按最小补丁修订，先锁定原稿章节、正文页数、图表编号/数量/尺寸和完整附录，再逐项修复可核实问题。公开发行版移除未授权第三方模板、用户案例和逐页私有数据，保留独立编写的工作流、聚合统计、证据追溯和数值稳定性检查。
 
+**v7.4 更新**: 以标准 `SKILL.md` 作为跨 Agent 入口，补充 Claude Code、Cursor、VS Code/Copilot、OpenCode 的发现路径、工具降级和状态互通说明，并提供安全的 `scripts/install_skill.py` 安装器。
+
 ## 已有论文修订：先保全基线
 
 “审计后修改”不等于重写。必读 `references/manuscript_revision_contract.md`：保留用户已认可的结构、图表和篇幅；每处改动对应一个已核实问题。未获授权不得换主模型、全篇压缩、删图迁表、缩图或重做全部附录。修订后以最新 PDF 实测页数，并比对源稿的章节、图表清单和尺寸；未完成的科学问题如实留在审计清单，不得为宣称全部解决而替换成未经验证的新答案。
 
 ---
 
-## Codex V7 原生入口
+## Agent Skills 入口 (跨 Agent)
 
-Codex 优先按 skill 目录发现本文件:
+本文件是跨客户端的唯一工作流入口。任何支持 `SKILL.md` 的 Agent 都应把它与相邻资源目录作为一个整体加载；不要只复制本文件。
+
+常见发现位置:
 
 - 用户级安装: `$HOME/.agents/skills/mathmodel-skill/`
 - 项目级安装: `<repo>/.agents/skills/mathmodel-skill/`
-- UI 元数据: `agents/openai.yaml`
-- 插件分发元数据: `.codex-plugin/plugin.json` + `skills/mathmodel-skill/SKILL.md` shim
+- Claude Code: `~/.claude/skills/mathmodel-skill/` 或 `<repo>/.claude/skills/mathmodel-skill/`
+- Cursor: `~/.cursor/skills/mathmodel-skill/` 或 `<repo>/.cursor/skills/mathmodel-skill/`
+- VS Code/Copilot: `~/.copilot/skills/mathmodel-skill/` 或 `<repo>/.github/skills/mathmodel-skill/`
+- OpenCode: `~/.config/opencode/skills/mathmodel-skill/` 或 `<repo>/.opencode/skills/mathmodel-skill/`
+- UI 元数据: `agents/openai.yaml` (Codex 可选)
+- 插件分发元数据: `.codex-plugin/plugin.json` + `skills/mathmodel-skill/SKILL.md` shim (Codex 可选)
 - 项目指导: `AGENTS.md` 仍可作为 repo / workspace 级 instructions, 但不是唯一入口
 
-当 skill 已安装后, 用户可直接说"开始建模"或显式说"使用 `$mathmodel-skill` 开始建模"。
+当 skill 已安装后, 用户可直接说"开始建模"、`/mathmodel-skill`，或使用客户端的自然语言/skill 命令触发。
 
 ---
 
-## Harness 兼容 (Claude Code / Codex)
+## Harness 兼容与降级策略
 
-本 skill v7.3.5 以 Codex Skills 为一等入口, 同时保持 harness-agnostic 设计:
+本 skill v7.4.0 以标准 `SKILL.md` 为一等入口，同时保持 harness-agnostic 设计:
 
-| harness | 入口文件 | 用户交互工具 | 状态文件 |
+| harness | 入口/发现 | 用户交互工具 | 状态文件 |
 |---------|---------|-------------|---------|
-| Claude Code | `SKILL.md` (本文件) | `AskUserQuestion` 工具 | `cwd/state/decision_log.json` |
-| Codex CLI / Codex app | skill 目录中的 `SKILL.md` + 可选 `AGENTS.md` | markdown 编号列表 | 同上 (**互通**) |
+| Claude Code | `.claude/skills/<name>/SKILL.md` | `AskUserQuestion` 工具 | `cwd/state/decision_log.json` |
+| Codex CLI / Codex app | `.agents/skills/<name>/SKILL.md` + 可选 plugin | markdown 编号列表 | 同上 (**互通**) |
+| Cursor | `.cursor/skills/<name>/SKILL.md` 或 `.agents/skills/` | slash command / Agent 选择 | 同上 (**互通**) |
+| VS Code/Copilot | `.github/skills/<name>/SKILL.md` 或 `.agents/skills/` | `/skills` 菜单 / Agent 选择 | 同上 (**互通**) |
+| OpenCode | `.opencode/skills/<name>/SKILL.md` 或 `.agents/skills/` | `skill` 工具 | 同上 (**互通**) |
+| 其他兼容 Agent | 客户端 skills 目录中的 `SKILL.md` | 原生 UI；否则编号列表 | 同上 (**互通**) |
 
 跨 harness 互通: day 1 用 Codex 跑 stage 0-2, day 2 切回 Claude Code 接着 stage 3+, 状态完全保留。详见 `references/harness_compat.md`。
+
+如果当前 harness 没有 `AskUserQuestion`、skill tool 或原生选项 UI：保留同一组决策字段，使用 Markdown 编号列表或一行自由文本提问；不得要求用户手动编辑 `decision_log.json`，不得因为工具缺失而伪造结果。
 
 ---
 
@@ -190,7 +205,7 @@ Claude Code: 用 `AskUserQuestion` 工具; Codex: 用 markdown 编号列表 (1-4
 - **stage 9 已有论文修订**：优先执行 `references/manuscript_revision_contract.md`；公开 skill 不内置用户稿件、评分或历史迭代案例。
 - **stage 9 数值与推断检查**：关键结果用不同实现或可观测量交叉核验，差异先调查假设、单位、色散、预处理和优化；不得直接把替代算法当真值。普通 F 检验须满足嵌套及误差分布条件；AIC 不要求嵌套，但要求同一数据上的可比似然与正确参数计数。相关光谱数据需验证相关误差模型或合适的分块验证，所有数据依赖步骤须在训练折内完成。病态基函数检查尺度、条件数及环境敏感性，不能仅凭版本差异断言根因。`p5/p95` 为中央 90% 区间；先验传播、场景范围和抽样置信区间必须分名。
 - 触发反馈时: 对应 `references/feedback_layer*.md`
-- harness 适配差异 (Codex 用户必读): `references/harness_compat.md`
+- harness 适配差异 (跨 Agent 用户必读): `references/harness_compat.md`
 
 ---
 

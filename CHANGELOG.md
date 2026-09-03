@@ -2,6 +2,12 @@
 
 All notable public changes are recorded here.
 
+## 7.4.0
+
+- Added cross-Agent Skills installation guidance for Codex, Claude Code, Cursor, VS Code/Copilot, OpenCode, and generic compatible clients.
+- Added the safe `scripts/install_skill.py` installer and regression tests for destination resolution, payload copying, and overwrite protection.
+- Expanded the README with architecture, observable artifacts, example prompts, runtime requirements, engineering trade-offs, and résumé-ready project descriptions.
+
 ## 7.3.5
 
 - Clarified that the public-release contributor listing covers only `xu-chenghao413`'s additions, refactoring, cleanup, tests, and release maintenance, while historical authors remain governed by the license and provenance records.
