@@ -22,7 +22,7 @@
 - **证据化**：每个子问题都要求形成“数据 → 预处理 → 模型 → 结果 → 回题结论”的链路，不用模型名称代替真实计算。
 - **可验证**：真实 Python 求解、统计/灵敏度、算法声明一致性、LaTeX/PDF QA 和最终交付机械门彼此衔接。
 - **跨 Agent**：核心入口是标准 `SKILL.md` 目录，可被 Codex、Claude Code、Cursor、VS Code/Copilot、OpenCode 或其他兼容 Agent Skills 的客户端加载。
-- **可审计**：保留 provenance、AI 使用记录、匿名检查、引用核验和版本化 delivery manifest，便于团队复盘和面试展示。
+- **可审计**：保留 provenance、AI 使用记录、匿名检查、引用核验和版本化 delivery manifest，便于团队复盘、审计和持续维护。
 
 ## 公开版定位与贡献
 
@@ -70,7 +70,7 @@ flowchart LR
 
 | 工程问题 | 实现 | 可检查产物 |
 |---|---|---|
-| 长流程容易丢上下文 | `decision_log.json` + resume 协议 | `state/decision_log.json` |
+| 长流程容易丢上下文 | `decision_log.json` + 恢复协议 | `state/decision_log.json` |
 | 模型选择缺少证据 | 候选模型比较、拒绝记录、反事实反馈 | Stage 3 评分与 rejection log |
 | “写了模型但没跑代码” | 真实代码求解和结果回题硬门 | `src/`、`results/`、QA 摘要 |
 | 论文超页或格式漂移 | 自适应页预算、section marker、PDF 结构检查 | `analysis/page_budget.json`、`paper_output/` |
@@ -306,23 +306,17 @@ py "$env:USERPROFILE\.codex\skills\.system\skill-installer\scripts\install-skill
 
 把 `<owner>/<repo>` 和 `<path/to/nature-writing>` 替换为实际、已获授权的来源；其他 `nature-*` skill（如 `nature-figure`、`nature-statistics`、`nature-reader`、`nature-reviewer`）按同样方式安装。若拿到的是合法的本地 skill 包，只需将包含 `SKILL.md` 的完整目录放入目标客户端支持的 skills 目录（例如 `.agents/skills/`、`.claude/skills/`、`.cursor/skills/`、`.github/skills/` 或 `.opencode/skills/`），然后重新加载客户端。安装后的外部 skill 不会改变本仓库的许可证，也不会自动成为本项目的组成部分。
 
-## 面试与简历亮点
+## 工程设计亮点
 
-### 中文简历描述
+本项目把数学建模竞赛中的长流程任务拆成可恢复、可验证、可交接的工程系统，重点设计包括：
 
-> 主导设计并开源一个跨 Agent 的数学建模竞赛工作流 Skill，将 CUMCM、MCM/ICM 和电工杯的“读题—建模—真实求解—统计稳健性—论文—盲审—交付”固化为 10 阶段可恢复状态机；实现 Autopilot/Guided 双模式、`decision_log.json` 跨会话接力、自适应页预算、算法声明一致性审计、AI 披露、PDF QA、版本化交付和 CI 回归测试，并兼容 Codex、Claude Code、Cursor、VS Code/Copilot 与 OpenCode。
+1. **状态机与可恢复执行**：阶段边界、输入输出、决策和 blocker 写入 `state/decision_log.json`，支持中断后继续，也支持在不同 Agent 之间接力。
+2. **证据链与机械门**：每个子问题都要求形成“数据 → 预处理 → 模型 → 结果 → 回题结论”链路；真实代码、结果文件、算法声明和日志不一致时，交付检查会阻止标记为 ready。
+3. **上下文与成本控制**：references 按阶段懒加载，反馈分为 L1–L4，论文修订优先采用 section-level patch，避免无证据的整篇重写。
+4. **跨客户端适配**：核心 `SKILL.md`、相对路径和状态协议保持自包含；问答 UI、文件工具和子代理等差异隔离在 harness 适配层，并提供无原生 UI 时的降级路径。
+5. **来源与隐私边界**：历史来源、原创重构、外部 `nature-*` 路由、用户材料和聚合统计分别记录，公开仓库不打包未经授权的论文、模板、数据或第三方 skill 资产。
 
-### English résumé bullet
-
-> Led the redesign and open-source release of a cross-agent mathematical-modeling workflow skill for CUMCM, MCM/ICM, and Diangong Cup. Built a recoverable 10-stage state machine with Autopilot/Guided modes, persistent decision logs, executable model pipelines, robustness checks, adaptive paper budgeting, algorithm-claim consistency audits, AI-use disclosure, PDF QA, versioned delivery manifests, and CI regression tests.
-
-### 面试时可以展开的工程决策
-
-1. **为什么用状态机而不是长 prompt？** 把阶段边界、输入输出和阻塞状态落盘，解决长任务中断、重复劳动和隐式上下文丢失。
-2. **如何证明 Agent 没有“编结果”？** 强制真实代码、结果文件、算法声明和日志互相对齐；`validate_delivery.py` 在机械门失败时拒绝标记为 ready。
-3. **如何控制上下文和成本？** 按阶段懒加载 references，L1→L2→L3/L4 分层反馈，section-level patch 替代整篇重写。
-4. **如何做跨平台兼容？** 保持 `SKILL.md` 与相对路径自包含，把 Claude Code 的问答工具、Codex 的编号选项和其他 Agent 的 fallback 行为隔离在 harness 适配层。
-5. **如何处理开源和第三方边界？** 外部 Nature skills 只做可选运行时路由，不打包其源码/资产；历史来源、许可证、聚合统计和隐私材料均有独立 provenance 记录。
+这些设计让项目既能直接用于竞赛协作，也便于复盘、测试、二次开发和团队内交接。
 
 ## 开发与验证
 
