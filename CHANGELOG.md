@@ -2,6 +2,10 @@
 
 All notable public changes are recorded here.
 
+## 7.3.3
+
+- Clarified mixed historical/public-release copyright attribution without removing the original MIT notice.
+
 ## 7.3.2
 
 - Pointed README badges and installation examples to the maintainer's public repository.

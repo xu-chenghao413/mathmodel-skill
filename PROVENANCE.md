@@ -6,8 +6,8 @@ This file defines what may enter the public repository. It is a maintenance reco
 
 | Artifact | Public basis | Publication rule |
 |---|---|---|
-| Source code and tests | Independently authored for this repository | MIT unless the file states otherwise |
-| `templates/latex/*/main.tex` | Independently authored assembly templates | MIT; keep SPDX header and do not paste third-party classes |
+| Source code and tests | Public-release additions and modifications are independently authored; historical portions retain their file-level notices | MIT unless the file states otherwise; see [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md) |
+| `templates/latex/*/main.tex` | Public-release assembly templates with preserved historical attribution where present | MIT for public-release additions; keep SPDX headers and do not paste third-party classes |
 | `competitions/cumcm/empirical.json` | Aggregate descriptive measurements from 91 located documents; 59 yielded extractable text | Publish aggregate fields only; do not publish PDFs, extracted text, filenames tied to private users, or sentence corpora |
 | `distilled_formats.md`, `distilled_naming.md`, `distilled_structures.md` | Independently rewritten summaries of aggregate observations | Keep only general patterns and sample-size limitations; never include copied passages |
 | `phrase_bank.md` and other phrase banks | Maintainer-authored generic writing scaffolds | Must be clean-room wording; do not reconstruct or paraphrase identifiable source sentences |

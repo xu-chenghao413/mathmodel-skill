@@ -2,6 +2,10 @@
 
 The root MIT License applies only to original code, documentation, and templates authored for this repository, unless a file states otherwise.
 
+## Historical attribution boundary
+
+The public release preserves the historical MIT notice for `handsomeZR-netizen` where earlier development snapshots or files carried that attribution. The current maintainer account `xu-chenghao413` owns the public-release additions, cleanup work, and subsequent modifications made in this repository. This notice does not claim a transfer of copyright for historical portions; contributors and commit metadata remain visible in Git history.
+
 ## Excluded CUMCMThesis material
 
 This release does not include or license any source code, documentation, examples, or binary files from [`latexstudio/CUMCMThesis`](https://github.com/latexstudio/CUMCMThesis).
@@ -25,4 +29,3 @@ Python, Pandoc, TeX Live, MiKTeX, XeLaTeX, pdfLaTeX, CTeX, Fandol, Poppler, and 
 Competition rules, linked papers, datasets, websites, trademarks, and other external sources are not relicensed by this repository's MIT License. Public accessibility does not by itself grant redistribution rights.
 
 The public repository does not include source-paper PDFs, user-provided manuscript files, page-by-page private case data, or copied paper passages. Aggregate descriptive statistics and independently written workflow guidance are documented in [`PROVENANCE.md`](./PROVENANCE.md).
-

@@ -1,6 +1,6 @@
 # mathmodel-skill
 
-[![Version](https://img.shields.io/badge/version-v7.3.2-blueviolet)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v7.3.3-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
@@ -117,7 +117,7 @@ Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https:
 
 ## 设计影响与可选集成
 
-本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.3.2 公开版只保留独立编写的实现和一般性方法，不打包这些外部 skills 的源码、文档或资产。
+本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.3.3 公开版只保留独立编写的实现和一般性方法，不打包这些外部 skills 的源码、文档或资产。
 
 `nature-*` 在本项目中只是可选能力路由名称，不表示与 Springer Nature、相关 skill 作者、OpenAI 或 Anthropic 存在隶属、认可或联合发布关系。各外部 skill 继续适用其自己的许可证和使用条件。
 
@@ -141,3 +141,5 @@ python scripts/doctor.py
 ## License
 
 除另有说明外，本仓库中由维护者原创的代码、文档和模板采用 [MIT License](./LICENSE)。MIT 不覆盖竞赛规则、论文、数据集、商标、外部 skills 或其他第三方材料；具体说明见 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。
+
+历史文件若保留其他作者的 MIT 署名，按文件中的通知和 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md) 处理；本项目不将这些历史部分冒称为当前维护者原创。
