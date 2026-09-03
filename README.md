@@ -1,7 +1,7 @@
 # mathmodel-skill
 
-[![Version](https://img.shields.io/badge/version-v7.3.1-blueviolet)](./CHANGELOG.md)
-[![CI](https://github.com/handsomeZR-netizen/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/handsomeZR-netizen/mathmodel-skill/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/version-v7.3.2-blueviolet)](./CHANGELOG.md)
+[![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
 面向 CUMCM、MCM/ICM 与电工杯的端到端数学建模竞赛工作流。它把赛题解析、模型选择、真实代码求解、统计与稳健性、图表、论文、合规检查和最终交付组织成可恢复的 10 个阶段。
@@ -34,7 +34,7 @@
 ### Codex skill
 
 ```bash
-git clone https://github.com/handsomeZR-netizen/mathmodel-skill.git ~/.agents/skills/mathmodel-skill
+git clone https://github.com/xu-chenghao413/mathmodel-skill.git ~/.agents/skills/mathmodel-skill
 python -m pip install -r ~/.agents/skills/mathmodel-skill/templates/shared/requirements.txt
 cd <your-team-workspace>
 codex
@@ -50,13 +50,13 @@ codex
 
 ```bash
 mkdir -p .agents/skills
-git clone https://github.com/handsomeZR-netizen/mathmodel-skill.git .agents/skills/mathmodel-skill
+git clone https://github.com/xu-chenghao413/mathmodel-skill.git .agents/skills/mathmodel-skill
 ```
 
 Windows PowerShell 可将目标目录换成：
 
 ```powershell
-git clone https://github.com/handsomeZR-netizen/mathmodel-skill.git "$HOME/.agents/skills/mathmodel-skill"
+git clone https://github.com/xu-chenghao413/mathmodel-skill.git "$HOME/.agents/skills/mathmodel-skill"
 py -m pip install -r "$HOME/.agents/skills/mathmodel-skill/templates/shared/requirements.txt"
 ```
 
@@ -117,7 +117,7 @@ Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https:
 
 ## 设计影响与可选集成
 
-本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.3.1 公开版只保留独立编写的实现和一般性方法，不打包这些外部 skills 的源码、文档或资产。
+本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.3.2 公开版只保留独立编写的实现和一般性方法，不打包这些外部 skills 的源码、文档或资产。
 
 `nature-*` 在本项目中只是可选能力路由名称，不表示与 Springer Nature、相关 skill 作者、OpenAI 或 Anthropic 存在隶属、认可或联合发布关系。各外部 skill 继续适用其自己的许可证和使用条件。
 

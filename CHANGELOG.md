@@ -2,6 +2,10 @@
 
 All notable public changes are recorded here.
 
+## 7.3.2
+
+- Pointed README badges and installation examples to the maintainer's public repository.
+
 ## 7.3.1
 
 - Updated the CUMCM AI-use baseline to the official 2026 trial rules effective 2026-09-01.
