@@ -6,19 +6,28 @@
 
 <div align="center">
 
+<strong>从一道题，到一套能复现、能审计、能交接的建模交付包。</strong><br/>
+<sub>From a problem statement to a reproducible, reviewable, handoff-ready modelling package.</sub>
+
+<br/>
+
 [![Version](https://img.shields.io/badge/version-v7.4.5-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-cross--agent-10A37F)](https://agentskills.io/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](./templates/shared/requirements.txt)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
-**把“读题 → 建模 → 真实求解 → 统计稳健性 → 论文写作 → 盲审 → 可复现交付”变成一条可恢复、可审计的工程流水线。**
+<a href="#5-分钟快速开始"><img src="https://img.shields.io/badge/5--min%20install-111827?style=for-the-badge" alt="5-minute install" /></a>
+<a href="./README.en.md"><img src="https://img.shields.io/badge/English%20README-4F46E5?style=for-the-badge" alt="English README" /></a>
 
-<a href="#5-分钟快速开始">快速开始</a> ·
+<a href="./README.en.md">English README</a> ·
+<a href="#5-分钟快速开始">5 分钟开始</a> ·
 <a href="#主要能力">能力地图</a> ·
-<a href="#客户端兼容矩阵">安装方式</a> ·
-<a href="#工程设计亮点">设计亮点</a> ·
+<a href="#安装与快速开始">安装方式</a> ·
 <a href="#贡献与社区">参与贡献</a>
+
+<br/>
+<sub>Autopilot when you want momentum · Guided Mode when you want control</sub>
 
 </div>
 
@@ -33,6 +42,14 @@
 | 状态机驱动 | CUMCM · MCM/ICM · 电工杯 | Codex · Claude · Cursor · Copilot · OpenCode | 代码 · 结果 · 论文 · QA · manifest |
 
 </div>
+
+<table>
+  <tr>
+    <td align="center" width="33%"><strong>🚀 Autopilot</strong><br/><sub>给出题面和附件，连续推进到可验证交付包。</sub></td>
+    <td align="center" width="33%"><strong>🧩 Guided Mode</strong><br/><sub>在选题、模型、稳健性和论文节点逐步确认。</sub></td>
+    <td align="center" width="33%"><strong>🔁 Resume anywhere</strong><br/><sub>用状态日志在中断后恢复，也可跨 Agent 接力。</sub></td>
+  </tr>
+</table>
 
 <details>
 <summary><strong>目录导航</strong></summary>
