@@ -55,6 +55,25 @@
   </tr>
 </table>
 
+## Explore the toolkit
+
+These are executable repository entry points, not just feature labels:
+
+<table>
+  <tr>
+    <td width="33%"><a href="./scripts/install_skill.py"><strong>🧰 Cross-agent installer</strong></a><br/><code>install_skill.py</code><br/><sub>Safely copy the full runtime payload by client and project/user scope.</sub></td>
+    <td width="33%"><a href="./scripts/bootstrap_run.py"><strong>🗺️ Workspace bootstrap</strong></a><br/><code>bootstrap_run.py</code><br/><sub>Create the source packet, state directory, competition route and recovery scene.</sub></td>
+    <td width="33%"><a href="./scripts/doctor.py"><strong>🩺 Environment doctor</strong></a><br/><code>doctor.py</code><br/><sub>Check Python, LaTeX, Pandoc, payload integrity and Codex metadata.</sub></td>
+  </tr>
+  <tr>
+    <td><a href="./examples/quickstart/run_demo.py"><strong>🧪 Offline demo</strong></a><br/><code>run_demo.py</code><br/><sub>Generate deterministic results, sensitivity analysis and a hashed manifest.</sub></td>
+    <td><a href="./scripts/verify_project.py"><strong>🔍 Release gate</strong></a><br/><code>verify_project.py</code><br/><sub>Check structure, versions, JSON/YAML and public CLI contracts.</sub></td>
+    <td><a href="./scripts/validate_delivery.py"><strong>📦 Delivery gate</strong></a><br/><code>validate_delivery.py</code><br/><sub>Cross-check the paper, code, results, QA, citations and ready state.</sub></td>
+  </tr>
+</table>
+
+See the complete [scripts index](./scripts/README.md). Start with the offline demo, then bring the workflow to a real contest problem.
+
 ## 5-minute quickstart
 
 Clone the public edition, install the complete runtime payload, and run the offline synthetic-data demo:

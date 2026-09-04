@@ -51,11 +51,31 @@
   </tr>
 </table>
 
+## 可直接体验的工具箱
+
+这些不是概念性模块，而是仓库里可以直接运行的入口：
+
+<table>
+  <tr>
+    <td width="33%"><a href="./scripts/install_skill.py"><strong>🧰 跨 Agent 安装</strong></a><br/><code>install_skill.py</code><br/><sub>按客户端与 project/user scope 安全复制完整运行时。</sub></td>
+    <td width="33%"><a href="./scripts/bootstrap_run.py"><strong>🗺️ 工作区初始化</strong></a><br/><code>bootstrap_run.py</code><br/><sub>建立 source packet、状态目录、竞赛路由与恢复现场。</sub></td>
+    <td width="33%"><a href="./scripts/doctor.py"><strong>🩺 环境诊断</strong></a><br/><code>doctor.py</code><br/><sub>检查 Python、LaTeX、Pandoc、payload 和 Codex 元数据。</sub></td>
+  </tr>
+  <tr>
+    <td><a href="./examples/quickstart/run_demo.py"><strong>🧪 离线 Demo</strong></a><br/><code>run_demo.py</code><br/><sub>用确定性合成数据生成结果、灵敏度分析和哈希清单。</sub></td>
+    <td><a href="./scripts/verify_project.py"><strong>🔍 发布前校验</strong></a><br/><code>verify_project.py</code><br/><sub>检查目录、版本、JSON/YAML 与公共 CLI。</sub></td>
+    <td><a href="./scripts/validate_delivery.py"><strong>📦 交付机械门</strong></a><br/><code>validate_delivery.py</code><br/><sub>核对论文、代码、结果、QA、引用和 submission-ready 状态。</sub></td>
+  </tr>
+</table>
+
+完整脚本索引见 [`scripts/README.md`](./scripts/README.md)，建议先运行离线 Demo，再接入真实赛题。
+
 <details>
 <summary><strong>目录导航</strong></summary>
 
 - [5 分钟快速开始](#5-分钟快速开始)
 - [为什么值得关注](#为什么值得关注)
+- [可直接体验的工具箱](#可直接体验的工具箱)
 - [主要能力](#主要能力)
 - [工程架构](#工程架构)
 - [支持范围](#支持范围)

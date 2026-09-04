@@ -1,59 +1,97 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
-  <title id="title">mathmodel-skill: reproducible mathematical modeling workflow</title>
-  <desc id="desc">A ten-stage pipeline from problem statement to reproducible delivery package.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">mathmodel-skill — an evidence-first mathematical modelling agent workflow</title>
+  <desc id="desc">A neon control-room style banner showing the mathematical modelling core connected to input, solve, validate and deliver stages.</desc>
   <defs>
-    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#10162d"/>
-      <stop offset="0.55" stop-color="#1b2146"/>
-      <stop offset="1" stop-color="#31205a"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070b18"/>
+      <stop offset="0.52" stop-color="#111936"/>
+      <stop offset="1" stop-color="#201442"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#10a37f"/>
-      <stop offset="1" stop-color="#8b7cf6"/>
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00e5b0"/>
+      <stop offset="0.48" stop-color="#55c7ff"/>
+      <stop offset="1" stop-color="#b58cff"/>
     </linearGradient>
-    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#6b7cff" stop-opacity="0.34"/>
+      <stop offset="0.62" stop-color="#21356e" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#0b1024" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#9db0ff" stroke-opacity="0.075" stroke-width="1"/>
     </pattern>
-    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
       <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="tinyGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
 
-  <rect width="1200" height="320" rx="24" fill="url(#background)"/>
-  <rect width="1200" height="320" rx="24" fill="url(#grid)"/>
-  <circle cx="1060" cy="-10" r="180" fill="#8b7cf6" opacity="0.12"/>
-  <circle cx="1150" cy="270" r="130" fill="#10a37f" opacity="0.10"/>
+  <rect width="1200" height="360" rx="28" fill="url(#bg)"/>
+  <rect width="1200" height="360" rx="28" fill="url(#grid)"/>
+  <circle cx="955" cy="178" r="245" fill="url(#halo)"/>
+  <path d="M0 302C210 264 314 340 520 292S870 258 1200 308" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
 
   <g font-family="Inter,Segoe UI,Arial,sans-serif">
-    <text x="68" y="92" font-size="48" font-weight="700" letter-spacing="-1" fill="#ffffff">mathmodel-skill</text>
-    <rect x="70" y="116" width="92" height="4" rx="2" fill="url(#accent)"/>
-    <text x="68" y="156" font-size="22" fill="#dbe5ff">From problem to reproducible delivery.</text>
-    <text x="68" y="191" font-size="15" fill="#aeb9d8">CUMCM · MCM/ICM · Diangong Cup · cross-agent · auditable</text>
+    <text x="62" y="56" font-size="12" font-weight="700" letter-spacing="2.4" fill="#7debd0">OPEN-SOURCE AGENT WORKFLOW · v7.4.5</text>
+    <text x="60" y="122" font-size="50" font-weight="750" letter-spacing="-1.5" fill="#ffffff">mathmodel-skill</text>
+    <rect x="63" y="143" width="210" height="5" rx="2.5" fill="url(#neon)"/>
+    <text x="62" y="181" font-size="22" font-weight="600" fill="#e9efff">Model. Validate. Deliver.</text>
+    <text x="62" y="207" font-size="15" fill="#aab8dd">A stateful, evidence-first workflow for contest teams.</text>
 
-    <g transform="translate(68 238)">
-      <rect x="0" y="0" width="230" height="38" rx="19" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.20"/>
-      <circle cx="22" cy="19" r="6" fill="#10a37f" filter="url(#glow)"/>
-      <text x="40" y="25" font-size="14" fill="#ffffff">Autopilot / Guided</text>
+    <g transform="translate(62 248)">
+      <rect x="0" y="0" width="132" height="62" rx="14" fill="#ffffff" fill-opacity="0.055" stroke="#ffffff" stroke-opacity="0.15"/>
+      <text x="18" y="25" font-size="22" font-weight="750" fill="#ffffff">10</text>
+      <text x="18" y="45" font-size="11" letter-spacing="1" fill="#98a9d7">STAGES</text>
+    </g>
+    <g transform="translate(206 248)">
+      <rect x="0" y="0" width="132" height="62" rx="14" fill="#ffffff" fill-opacity="0.055" stroke="#ffffff" stroke-opacity="0.15"/>
+      <text x="18" y="25" font-size="22" font-weight="750" fill="#ffffff">3</text>
+      <text x="18" y="45" font-size="11" letter-spacing="1" fill="#98a9d7">CONTESTS</text>
+    </g>
+    <g transform="translate(350 248)">
+      <rect x="0" y="0" width="154" height="62" rx="14" fill="#ffffff" fill-opacity="0.055" stroke="#ffffff" stroke-opacity="0.15"/>
+      <text x="18" y="25" font-size="22" font-weight="750" fill="#ffffff">1</text>
+      <text x="18" y="45" font-size="11" letter-spacing="1" fill="#98a9d7">DELIVERY PACK</text>
     </g>
 
-    <g transform="translate(430 58)">
-      <text x="0" y="0" font-size="13" font-weight="700" letter-spacing="2" fill="#9fbbff">10-STAGE PIPELINE</text>
-      <path d="M 10 80 H 660" stroke="url(#accent)" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
-      <g fill="#1b2146" stroke="#b8c6ff" stroke-width="2">
-        <circle cx="10" cy="80" r="13"/><circle cx="82" cy="80" r="13"/><circle cx="154" cy="80" r="13"/>
-        <circle cx="226" cy="80" r="13"/><circle cx="298" cy="80" r="13"/><circle cx="370" cy="80" r="13"/>
-        <circle cx="442" cy="80" r="13"/><circle cx="514" cy="80" r="13"/><circle cx="586" cy="80" r="13"/><circle cx="658" cy="80" r="13"/>
+    <g transform="translate(760 44)">
+      <text x="0" y="0" font-size="12" font-weight="700" letter-spacing="2.2" fill="#9fbbff">EVIDENCE CONTROL ROOM</text>
+      <circle cx="198" cy="154" r="142" fill="none" stroke="#8392ff" stroke-opacity="0.18" stroke-width="1" stroke-dasharray="4 9"/>
+      <circle cx="198" cy="154" r="104" fill="none" stroke="url(#neon)" stroke-opacity="0.35" stroke-width="2"/>
+      <ellipse cx="198" cy="154" rx="142" ry="46" fill="none" stroke="#55c7ff" stroke-opacity="0.28" stroke-width="1.5" transform="rotate(-28 198 154)"/>
+      <ellipse cx="198" cy="154" rx="142" ry="46" fill="none" stroke="#c18cff" stroke-opacity="0.22" stroke-width="1.5" transform="rotate(28 198 154)"/>
+      <circle cx="198" cy="154" r="67" fill="#151e46" stroke="url(#neon)" stroke-width="3" filter="url(#softGlow)"/>
+      <circle cx="198" cy="154" r="53" fill="#0b1027" stroke="#ffffff" stroke-opacity="0.12"/>
+      <text x="198" y="164" text-anchor="middle" font-size="42" font-weight="800" fill="#ffffff">M</text>
+      <circle cx="198" cy="12" r="5" fill="#00e5b0" filter="url(#tinyGlow)"/>
+      <circle cx="329" cy="154" r="5" fill="#55c7ff" filter="url(#tinyGlow)"/>
+      <circle cx="198" cy="296" r="5" fill="#b58cff" filter="url(#tinyGlow)"/>
+      <circle cx="67" cy="154" r="5" fill="#ff62c8" filter="url(#tinyGlow)"/>
+
+      <g transform="translate(18 54)">
+        <rect width="112" height="34" rx="17" fill="#111b3b" stroke="#00e5b0" stroke-opacity="0.65"/>
+        <circle cx="17" cy="17" r="4" fill="#00e5b0"/>
+        <text x="30" y="22" font-size="11" font-weight="700" fill="#dffef6">INPUT</text>
       </g>
-      <g fill="#ffffff" font-size="11" text-anchor="middle">
-        <text x="10" y="84">0</text><text x="82" y="84">1</text><text x="154" y="84">2</text><text x="226" y="84">3</text><text x="298" y="84">4</text>
-        <text x="370" y="84">5</text><text x="442" y="84">6</text><text x="514" y="84">7</text><text x="586" y="84">8</text><text x="658" y="84">9</text>
+      <g transform="translate(266 54)">
+        <rect width="112" height="34" rx="17" fill="#111b3b" stroke="#55c7ff" stroke-opacity="0.65"/>
+        <circle cx="17" cy="17" r="4" fill="#55c7ff"/>
+        <text x="30" y="22" font-size="11" font-weight="700" fill="#e4f7ff">SOLVE</text>
       </g>
-      <g fill="#aeb9d8" font-size="12">
-        <text x="0" y="126">source</text><text x="190" y="126">model</text><text x="362" y="126">evidence</text><text x="548" y="126">paper</text><text x="626" y="156">QA</text>
+      <g transform="translate(18 220)">
+        <rect width="112" height="34" rx="17" fill="#111b3b" stroke="#ff62c8" stroke-opacity="0.65"/>
+        <circle cx="17" cy="17" r="4" fill="#ff62c8"/>
+        <text x="30" y="22" font-size="11" font-weight="700" fill="#ffe9f8">PAPER</text>
       </g>
-      <path d="M 14 164 C 100 140, 155 187, 240 160 S 390 141, 470 168 S 590 142, 660 164" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2"/>
-      <text x="0" y="205" font-size="14" fill="#dbe5ff">state  →  real code  →  robustness  →  PDF  →  manifest</text>
+      <g transform="translate(266 220)">
+        <rect width="112" height="34" rx="17" fill="#111b3b" stroke="#b58cff" stroke-opacity="0.65"/>
+        <circle cx="17" cy="17" r="4" fill="#b58cff"/>
+        <text x="30" y="22" font-size="11" font-weight="700" fill="#f0e9ff">QA</text>
+      </g>
     </g>
   </g>
 </svg>
