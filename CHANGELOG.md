@@ -2,6 +2,10 @@
 
 All notable public changes are recorded here.
 
+## 7.4.4
+
+- Fixed GitHub Actions portability by using the supported `github.workspace` context for the cross-platform Matplotlib cache path.
+
 ## 7.4.3
 
 - Hardened CLI output and subprocess decoding for UTF-8 on Windows, redirected pipes, and embedded runners.

@@ -1,4 +1,4 @@
-# AGENTS.md — mathmodel-skill v7.4.3 (跨 Agent / Project Instructions)
+# AGENTS.md — mathmodel-skill v7.4.4 (跨 Agent / Project Instructions)
 
 > 本文件是 **Codex** 及遵循 `AGENTS.md` 约定的 agentic CLI 的项目级适配层。
 > 真正的工作流定义在 `SKILL.md`，请把它当作主指令读取。本文件只解释 **harness 差异**。
