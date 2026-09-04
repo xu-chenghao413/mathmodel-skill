@@ -22,6 +22,18 @@ python /path/to/mathmodel-skill/scripts/install_skill.py \
 
 安装后的便携 payload 可以直接运行 `python scripts/doctor.py --skip-tools`。Codex 的 `agents/openai.yaml`、`.codex-plugin/plugin.json` 和 plugin shim 属于可选元数据；在完整源码 checkout 中如需强制检查它们，可运行 `python scripts/doctor.py --require-codex --skip-tools`。
 
+### `verify_project.py` — 发布前结构与 CLI 校验
+
+检查必需目录、JSON/YAML 语法、版本号一致性，并可对公共 CLI 运行 `--help`：
+
+```bash
+python scripts/verify_project.py --check-cli --require-yaml
+```
+
+### `build_sbom.py` — 源码 SBOM
+
+按文件生成带 SHA-256 哈希的 CycloneDX 风格 SBOM；Release workflow 会把它作为发布资产，并对源码归档生成 GitHub 构建证明。
+
 ### `smoke_install.py` — 跨平台安装冒烟检查
 
 在临时目录安装完整 payload，确认运行时文件存在、CI/测试/用户 state 没有被复制，并运行一次便携版 `doctor.py`。GitHub Actions 会在 Ubuntu、macOS 和 Windows 上执行它：

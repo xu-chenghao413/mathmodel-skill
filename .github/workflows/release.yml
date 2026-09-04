@@ -7,16 +7,20 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
+  artifact-metadata: write
 
 jobs:
   release:
     name: Validate and publish release assets
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
       MPLBACKEND: Agg
       MPLCONFIGDIR: /tmp/mathmodel-matplotlib
       PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUTF8: "1"
     steps:
       - name: Check out tagged source
         uses: actions/checkout@v6
@@ -26,14 +30,15 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install validation dependencies
+      - name: Install pinned validation dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install PyYAML reportlab unidiff numpy scipy pandas matplotlib seaborn scikit-learn
+          python -m pip install -r .github/requirements-ci.txt
 
       - name: Validate source and regression suite
         run: |
-          python -m compileall -q scripts templates/shared/code_starter
+          python -m compileall -q scripts examples/quickstart templates/shared/code_starter
+          python scripts/verify_project.py --check-cli --require-yaml
           python -m unittest discover -s tests -p "test_*.py" -q
           python scripts/doctor.py --competition cumcm --skip-tools --require-codex
           python scripts/doctor.py --competition mcm --skip-tools
@@ -47,6 +52,20 @@ jobs:
           git archive --format=tar.gz --prefix="mathmodel-skill-${TAG_NAME}/" "${TAG_NAME}" -o "dist/mathmodel-skill-${TAG_NAME}.tar.gz"
           sha256sum "dist/mathmodel-skill-${TAG_NAME}.tar.gz" > "dist/mathmodel-skill-${TAG_NAME}.tar.gz.sha256"
 
+      - name: Build source SBOM
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          python scripts/build_sbom.py \
+            --source . \
+            --version "${TAG_NAME#v}" \
+            --output "dist/mathmodel-skill-${TAG_NAME}.sbom.json"
+
+      - name: Attest source archive provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/mathmodel-skill-${{ github.ref_name }}.tar.gz
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -55,5 +74,6 @@ jobs:
           gh release create "${TAG_NAME}" \
             "dist/mathmodel-skill-${TAG_NAME}.tar.gz" \
             "dist/mathmodel-skill-${TAG_NAME}.tar.gz.sha256" \
+            "dist/mathmodel-skill-${TAG_NAME}.sbom.json" \
             --title "mathmodel-skill ${TAG_NAME}" \
             --generate-notes

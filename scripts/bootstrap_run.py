@@ -14,6 +14,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
+
 
 COMPETITIONS = ("cumcm", "mcm", "diangong")
 NATURE_SKILLS = (
@@ -337,4 +342,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    configure_stdio()
     sys.exit(main())

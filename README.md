@@ -1,6 +1,6 @@
 # mathmodel-skill
 
-[![Version](https://img.shields.io/badge/version-v7.4.2-blueviolet)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v7.4.3-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-cross--agent-10A37F)](https://agentskills.io/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](./templates/shared/requirements.txt)
@@ -30,7 +30,7 @@ python scripts/install_skill.py --source . --destination .agents/skills/mathmode
 python examples/quickstart/run_demo.py --output demo-output
 ```
 
-示例会生成 `input/`、`state/`、`analysis/`、`results/` 和带 SHA-256 清单的 `qa/manifest.json`；它不会把结果写回 skill 安装目录。完整说明见 [`examples/quickstart/README.md`](./examples/quickstart/README.md)。安装后，在支持 Agent Skills 的客户端中重新加载 skill，并提供题面和附件即可开始真实竞赛工作流。
+示例会生成 `input/`、`state/`、`analysis/`、`results/`（含分配表、灵敏度表和 SVG 图）和带 SHA-256 清单的 `qa/manifest.json`；它不会把结果写回 skill 安装目录。完整说明见 [`examples/quickstart/README.md`](./examples/quickstart/README.md)。安装后，在支持 Agent Skills 的客户端中重新加载 skill，并提供题面和附件即可开始真实竞赛工作流。
 
 ## 为什么值得关注
 
@@ -296,7 +296,7 @@ Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https:
 
 ## 设计影响与可选集成
 
-本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.4.2 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
+本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.4.3 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
 
 历史来源之一是 [handsomeZR-netizen/mathmodel-skill](https://github.com/handsomeZR-netizen/mathmodel-skill)。其 MIT 通知适用于相应历史部分；本公开版的新增和修改由 `xu-chenghao413` 维护。该链接用于来源和许可证核对，不表示本仓库属于原仓库所有者。
 
@@ -346,18 +346,21 @@ py "$env:USERPROFILE\.codex\skills\.system\skill-installer\scripts\install-skill
 
 ```bash
 python -m unittest discover -s tests -v
+python scripts/verify_project.py --check-cli --require-yaml
 python scripts/doctor.py
 ```
 
-GitHub Actions 在每次 push / pull request 上用 Python 3.10 和 3.12 执行源码编译、回归测试，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；独立的安装冒烟任务会在 Ubuntu、macOS 和 Windows 上安装便携 payload，并运行合成 quickstart。本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
+CI 与发布使用 [`.github/requirements-ci.txt`](./.github/requirements-ci.txt) 中的精确版本；用户运行时仍可按 [`templates/shared/requirements.txt`](./templates/shared/requirements.txt) 的兼容下限安装依赖。
 
-发布采用版本号、`CHANGELOG.md` 和 annotated tag 对齐的方式；推送 `v*` tag 后，Release workflow 会重新执行验证，并生成带 SHA-256 校验文件的源码归档。
+GitHub Actions 在每次 push / pull request 上用 Python 3.10 和 3.12、Ubuntu/macOS/Windows 三平台执行源码编译、回归测试、结构与 CLI 校验、覆盖率基线，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；独立的安装冒烟任务还会安装便携 payload 并运行合成 quickstart。覆盖率报告作为 CI artifact 保存，当前门槛为 30% 以防止基线倒退。本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
+
+发布采用版本号、`CHANGELOG.md` 和 annotated tag 对齐的方式；推送 `v*` tag 后，Release workflow 会重新执行验证，并生成带 SHA-256 校验文件和 SBOM 的源码归档，同时使用 GitHub Artifact Attestations 生成构建来源证明。
 
 提交前还应检查：
 
 - 版本号在 README、`SKILL.md`、`AGENTS.md` 与 plugin manifest 中一致；
 - 仓库和完整 Git 历史不存在论文 PDF、用户案例或未授权模板；
-- 所有 JSON/YAML 可解析，测试全绿，示例命令能在干净环境运行。
+- 所有 JSON/YAML 可解析，结构与 CLI 校验通过，测试全绿，示例命令能在干净环境运行。
 
 贡献方式见 [`CONTRIBUTING.md`](./CONTRIBUTING.md)，安全问题见 [`SECURITY.md`](./SECURITY.md)，版本变化见 [`CHANGELOG.md`](./CHANGELOG.md)。
 

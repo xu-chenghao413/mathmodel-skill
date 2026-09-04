@@ -26,6 +26,11 @@ import subprocess
 import shutil
 from pathlib import Path
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:  # direct execution from the scripts directory
+    from console import configure_stdio
+
 
 _SKILL_ROOT = Path(__file__).resolve().parent.parent
 
@@ -409,7 +414,13 @@ def find_unresolved_front_matter_placeholders(tex_text: str) -> list[str]:
 
 def has_pandoc() -> bool:
     try:
-        r = subprocess.run(["pandoc", "--version"], capture_output=True, text=True)
+        r = subprocess.run(
+            ["pandoc", "--version"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
         return r.returncode == 0
     except FileNotFoundError:
         return False
@@ -419,7 +430,11 @@ def md_to_tex_pandoc(md_text: str) -> str:
     r = subprocess.run(
         ["pandoc", "-f", "markdown+tex_math_dollars+pipe_tables+raw_tex",
          "-t", "latex", "--no-highlight"],
-        input=md_text, capture_output=True, text=True, encoding="utf-8"
+        input=md_text,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     if r.returncode != 0:
         raise RuntimeError(f"pandoc 失败: {r.stderr}")
@@ -887,4 +902,5 @@ def main():
 
 if __name__ == "__main__":
     import sys
+    configure_stdio()
     sys.exit(main())

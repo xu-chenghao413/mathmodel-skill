@@ -17,6 +17,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
+
 
 REQUIRED_USE_FIELDS = (
     "purpose_and_stage",
@@ -364,4 +369,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    configure_stdio()
     sys.exit(main())

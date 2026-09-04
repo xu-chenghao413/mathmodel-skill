@@ -14,6 +14,11 @@ from pathlib import Path
 
 from install_skill import install_payload
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
+
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -54,4 +59,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    configure_stdio()
     raise SystemExit(main())

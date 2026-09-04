@@ -53,6 +53,11 @@ import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
 from typing import Any, Dict, List, Optional, Sequence
 
 
@@ -775,4 +780,5 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 
 if __name__ == "__main__":
+    configure_stdio()
     raise SystemExit(main())

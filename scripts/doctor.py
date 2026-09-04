@@ -13,6 +13,11 @@ import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:  # direct execution from the scripts directory
+    from console import configure_stdio
+
 
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 COMPETITIONS = ("cumcm", "mcm", "diangong")
@@ -98,7 +103,12 @@ def _tex_file_available(filename: str) -> bool:
         return False
     try:
         result = subprocess.run(
-            [kpsewhich, filename], capture_output=True, text=True, check=False
+            [kpsewhich, filename],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
         )
     except OSError:
         return False
@@ -413,4 +423,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    configure_stdio()
     raise SystemExit(main())

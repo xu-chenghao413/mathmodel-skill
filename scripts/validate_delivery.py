@@ -14,6 +14,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
+
 
 PLACEHOLDER_RE = re.compile(
     r"\b(?:TODO|TBD|AUTHOR_INPUT_NEEDED)\b|\[TO CONFIRM(?::[^\]]*)?\]|\?\?",
@@ -522,4 +527,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    configure_stdio()
     sys.exit(main())

@@ -17,6 +17,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
+
 
 MAX_CUMCM_BYTES = 20 * 1024 * 1024
 
@@ -431,4 +436,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    configure_stdio()
     sys.exit(main())

@@ -15,6 +15,11 @@ import shutil
 import sys
 from pathlib import Path
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
+
 
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 SKILL_NAME = "mathmodel-skill"
@@ -166,4 +171,5 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
+    configure_stdio()
     raise SystemExit(main())

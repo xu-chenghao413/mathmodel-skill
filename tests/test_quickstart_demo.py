@@ -40,7 +40,19 @@ class QuickstartDemoTests(unittest.TestCase):
             self.assertTrue(manifest["synthetic_data"])
             self.assertTrue(manifest["ready"])
             self.assertIn("results/allocation.csv", manifest["files"])
+            self.assertIn("results/sensitivity.csv", manifest["files"])
+            self.assertIn("results/allocation.svg", manifest["files"])
             self.assertIn("analysis/model_card.json", manifest["files"])
+
+            with (output / "results" / "sensitivity.csv").open(encoding="utf-8", newline="") as handle:
+                sensitivity = list(csv.DictReader(handle))
+            self.assertEqual(len(sensitivity), 5 * 3 * 5)
+            for scenario in sorted({row["scenario"] for row in sensitivity}):
+                scenario_total = sum(
+                    (Decimal(row["allocation"]) for row in sensitivity if row["scenario"] == scenario),
+                    Decimal("0"),
+                )
+                self.assertEqual(scenario_total, Decimal("10000.00"), scenario)
 
     def test_demo_refuses_overwrite_without_force(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

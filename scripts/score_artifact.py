@@ -31,6 +31,11 @@ import math
 import re
 import tempfile
 from pathlib import Path
+
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
 from datetime import datetime
 
 
@@ -861,4 +866,5 @@ def main():
 
 if __name__ == "__main__":
     import sys
+    configure_stdio()
     sys.exit(main())

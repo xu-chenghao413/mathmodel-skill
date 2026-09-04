@@ -15,6 +15,7 @@ import hashlib
 import json
 import shutil
 import sys
+from html import escape
 from decimal import Decimal, ROUND_DOWN
 from pathlib import Path
 
@@ -65,12 +66,30 @@ def _read_rows() -> list[dict[str, object]]:
     return rows
 
 
-def _allocate(rows: list[dict[str, object]]) -> list[dict[str, object]]:
-    total_weight = sum((row["weight"] for row in rows), Decimal("0"))
+def _allocate(
+    rows: list[dict[str, object]],
+    demand_multiplier: tuple[str, Decimal] | None = None,
+) -> list[dict[str, object]]:
+    """Allocate the budget, optionally perturbing one region's demand index."""
+    weighted_rows: list[dict[str, object]] = []
+    for row in rows:
+        multiplier = (
+            demand_multiplier[1]
+            if demand_multiplier is not None and row["region"] == demand_multiplier[0]
+            else Decimal("1")
+        )
+        weighted_rows.append(
+            {
+                **row,
+                "scenario_demand_index": row["demand_index"] * multiplier,
+                "scenario_weight": row["weight"] * multiplier,
+            }
+        )
+    total_weight = sum((row["scenario_weight"] for row in weighted_rows), Decimal("0"))
     budget_cents = int((BUDGET * 100).to_integral_value())
     allocations: list[dict[str, object]] = []
-    for row in rows:
-        raw = BUDGET * row["weight"] / total_weight
+    for row in weighted_rows:
+        raw = BUDGET * row["scenario_weight"] / total_weight
         cents = int((raw * 100).to_integral_value(rounding=ROUND_DOWN))
         allocations.append({**row, "raw_cents": raw * 100, "cents": cents})
 
@@ -91,6 +110,36 @@ def _allocate(rows: list[dict[str, object]]) -> list[dict[str, object]]:
         item["allocation"] = amount.quantize(Decimal("0.01"))
         item["share"] = (amount / BUDGET * 100).quantize(Decimal("0.01"))
     return allocations
+
+
+def _write_svg(path: Path, allocations: list[dict[str, object]]) -> None:
+    """Write a dependency-free SVG bar chart for the baseline allocation."""
+    width, height = 760, 420
+    chart_left, chart_top, chart_width, chart_height = 80, 45, 630, 290
+    max_value = max(float(item["allocation"]) for item in allocations) or 1.0
+    gap = chart_width / len(allocations)
+    bar_width = gap * 0.62
+    bars: list[str] = []
+    for index, item in enumerate(allocations):
+        value = float(item["allocation"])
+        x = chart_left + index * gap + (gap - bar_width) / 2
+        bar_height = value / max_value * chart_height
+        y = chart_top + chart_height - bar_height
+        label = escape(str(item["region"]))
+        bars.append(
+            f'<rect x="{x:.1f}" y="{y:.1f}" width="{bar_width:.1f}" height="{bar_height:.1f}" fill="#5b5bd6" rx="4"/>'
+            f'<text x="{x + bar_width / 2:.1f}" y="{height - 48}" text-anchor="middle" font-size="14" fill="#202124">{label}</text>'
+            f'<text x="{x + bar_width / 2:.1f}" y="{max(y - 8, 20):.1f}" text-anchor="middle" font-size="12" fill="#202124">{value:,.2f}</text>'
+        )
+    svg = (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">'
+        '<title>Budget allocation by region</title><rect width="100%" height="100%" fill="white"/>'
+        f'<text x="{width / 2}" y="25" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#202124">Synthetic budget allocation</text>'
+        f'<line x1="{chart_left}" y1="{chart_top + chart_height}" x2="{chart_left + chart_width}" y2="{chart_top + chart_height}" stroke="#777"/>'
+        + "".join(bars)
+        + "</svg>\n"
+    )
+    path.write_text(svg, encoding="utf-8")
 
 
 def _sha256(path: Path) -> str:
@@ -163,6 +212,11 @@ def run(output: Path, force: bool = False) -> Path:
                 "synthetic data only",
                 "no travel-time, capacity, uncertainty, or fairness constraint is modeled",
             ],
+            "sensitivity": {
+                "method": "one-at-a-time demand-index perturbation",
+                "scenarios": ["-10%", "baseline", "+10%"],
+                "artifact": "results/sensitivity.csv",
+            },
             "total_weight": str(total_weight),
         },
     )
@@ -184,6 +238,32 @@ def run(output: Path, force: bool = False) -> Path:
                     "share_pct": f"{item['share']:.2f}",
                 }
             )
+
+    sensitivity_rows: list[dict[str, object]] = []
+    for region in (str(row["region"]) for row in rows):
+        for scenario, multiplier in (
+            ("-10%", Decimal("0.90")),
+            ("baseline", Decimal("1.00")),
+            ("+10%", Decimal("1.10")),
+        ):
+            for item in _allocate(rows, (region, multiplier)):
+                sensitivity_rows.append(
+                    {
+                        "scenario": f"{region}:{scenario}",
+                        "perturbed_region": region,
+                        "demand_multiplier": multiplier,
+                        "region": item["region"],
+                        "allocation": f"{item['allocation']:.2f}",
+                    }
+                )
+    with (output / "results" / "sensitivity.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["scenario", "perturbed_region", "demand_multiplier", "region", "allocation"],
+        )
+        writer.writeheader()
+        writer.writerows(sensitivity_rows)
+    _write_svg(output / "results" / "allocation.svg", allocations)
 
     amounts = [item["allocation"] for item in allocations]
     _write_json(
@@ -234,7 +314,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"demo failed: {exc}", file=sys.stderr)
         return 2
     print(f"demo complete: {output}")
-    print("artifacts: input/, state/, analysis/, results/, qa/manifest.json")
+    print("artifacts: input/, state/, analysis/, results/ (allocation, sensitivity, SVG), qa/manifest.json")
     return 0
 
 

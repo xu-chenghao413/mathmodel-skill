@@ -2,6 +2,14 @@
 
 All notable public changes are recorded here.
 
+## 7.4.3
+
+- Hardened CLI output and subprocess decoding for UTF-8 on Windows, redirected pipes, and embedded runners.
+- Expanded CI to the full Python 3.10/3.12 matrix on Ubuntu, macOS, and Windows with exact dependency pins.
+- Added repository structure/version/CLI verification and a 30% coverage regression baseline with uploaded XML reports.
+- Added a dependency-free CycloneDX-style SBOM and GitHub build-provenance attestation to tagged releases.
+- Enriched the offline quickstart with one-at-a-time ±10% sensitivity scenarios and an SVG allocation chart.
+
 ## 7.4.2
 
 - Added a dependency-free synthetic quickstart that generates input, state, model-card, result, and SHA-256 manifest artifacts in one command.

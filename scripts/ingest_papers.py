@@ -23,6 +23,11 @@ from pathlib import Path
 from collections import defaultdict
 from datetime import datetime
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
+
 
 def extract_pdf_text(pdf_path: Path) -> str:
     try:
@@ -327,4 +332,5 @@ def main():
 
 if __name__ == "__main__":
     import sys
+    configure_stdio()
     sys.exit(main())

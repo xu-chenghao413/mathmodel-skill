@@ -18,6 +18,11 @@ import tempfile
 from pathlib import Path
 from typing import Any, Sequence
 
+try:
+    from scripts.console import configure_stdio
+except ImportError:
+    from console import configure_stdio
+
 
 PROFILE_TARGETS = {"compact": 26, "balanced": 27, "dense": 28}  # 2026-08-20 起正文 26-28 页为硬性区间（用户决策），替换原 30 页上限口径
 OFFICIAL_BODY_HARD_CAP = 28  # 硬性上限
@@ -341,4 +346,5 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
+    configure_stdio()
     raise SystemExit(main())
