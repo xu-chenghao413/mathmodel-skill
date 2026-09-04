@@ -22,6 +22,7 @@
 
 <a href="./README.en.md">English README</a> ·
 <a href="#5-分钟快速开始">5 分钟开始</a> ·
+<a href="#交互式上手">交互式上手</a> ·
 <a href="#主要能力">能力地图</a> ·
 <a href="#安装与快速开始">安装方式</a> ·
 <a href="#贡献与社区">参与贡献</a>
@@ -70,12 +71,55 @@
 
 完整脚本索引见 [`scripts/README.md`](./scripts/README.md)，建议先运行离线 Demo，再接入真实赛题。
 
+## 交互式上手
+
+点击与你的目标匹配的入口，直接复制对应 Prompt：
+
+<details>
+<summary><strong>① 我只想先验证安装是否正常</strong></summary>
+
+```bash
+python scripts/doctor.py --skip-tools
+python examples/quickstart/run_demo.py --output demo-output
+```
+
+这条路径完全离线，适合先检查 payload、状态目录、结果文件、灵敏度分析和 SHA-256 manifest。
+</details>
+
+<details>
+<summary><strong>② 我有题面和附件，直接进入 Autopilot</strong></summary>
+
+```text
+这是我的数学建模赛题和附件。请使用 mathmodel-skill，从 source packet 开始自动推进：完成选题、问题拆解、模型比较、真实代码求解、统计稳健性、论文/PDF、引用核验和最终交付包；所有关键决策写入 state/decision_log.json。
+```
+
+</details>
+
+<details>
+<summary><strong>③ 我希望每一步都由我确认</strong></summary>
+
+```text
+请使用 mathmodel-skill 的 Guided Mode。每个阶段先给出候选方案、证据、风险和下一步选项，等我确认后再继续；不要跳过真实运行、稳健性分析或 blocker 记录。
+```
+
+</details>
+
+<details>
+<summary><strong>④ 我已有论文，只做终审与交付检查</strong></summary>
+
+```text
+请审计这份数学建模论文的模型—代码—结果一致性、统计、引用、页数、匿名、PDF 结构和交付 manifest；只提出有证据支持的最小修改，并明确哪些问题会阻止 submission-ready。
+```
+
+</details>
+
 <details>
 <summary><strong>目录导航</strong></summary>
 
 - [5 分钟快速开始](#5-分钟快速开始)
 - [为什么值得关注](#为什么值得关注)
 - [可直接体验的工具箱](#可直接体验的工具箱)
+- [交互式上手](#交互式上手)
 - [主要能力](#主要能力)
 - [工程架构](#工程架构)
 - [支持范围](#支持范围)

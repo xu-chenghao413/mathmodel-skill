@@ -22,6 +22,7 @@
 
 <a href="./README.md">简体中文</a> ·
 <a href="#5-minute-quickstart">Quickstart</a> ·
+<a href="#interactive-entry-points">Interactive paths</a> ·
 <a href="#supported-clients">Clients</a> ·
 <a href="#contributing">Contributing</a>
 
@@ -73,6 +74,48 @@ These are executable repository entry points, not just feature labels:
 </table>
 
 See the complete [scripts index](./scripts/README.md). Start with the offline demo, then bring the workflow to a real contest problem.
+
+## Interactive entry points
+
+Open the path that matches your goal and copy the prompt or command:
+
+<details>
+<summary><strong>① I only want to verify the installation</strong></summary>
+
+```bash
+python scripts/doctor.py --skip-tools
+python examples/quickstart/run_demo.py --output demo-output
+```
+
+This path is fully offline and checks the payload, state directory, generated results, sensitivity analysis and SHA-256 manifest.
+</details>
+
+<details>
+<summary><strong>② I have a problem statement and attachments — run Autopilot</strong></summary>
+
+```text
+Use mathmodel-skill for this mathematical modelling problem and its attachments. Start from the source packet and run the full route: selection, decomposition, model comparison, real executable solving, statistical robustness, paper/PDF, citation checks and the final delivery package. Write every key decision to state/decision_log.json.
+```
+
+</details>
+
+<details>
+<summary><strong>③ I want to approve every major decision</strong></summary>
+
+```text
+Use mathmodel-skill in Guided Mode. At each stage, show candidate approaches, evidence, risks and next-step options, then wait for my confirmation. Do not skip real execution, robustness analysis or blocker logging.
+```
+
+</details>
+
+<details>
+<summary><strong>④ I already have a paper — run final audit</strong></summary>
+
+```text
+Audit this modelling paper for model–code–result consistency, statistics, citations, page budget, anonymity, PDF structure and delivery manifest. Propose only evidence-backed minimal changes and state which issues block a submission-ready result.
+```
+
+</details>
 
 ## 5-minute quickstart
 
