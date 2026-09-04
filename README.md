@@ -1,18 +1,55 @@
 # mathmodel-skill
 
+<div align="center">
+  <img src="./assets/mathmodel-banner.svg" alt="mathmodel-skill：从赛题到可复现交付包的十阶段数学建模工作流" width="100%" />
+</div>
+
+<div align="center">
+
 [![Version](https://img.shields.io/badge/version-v7.4.5-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-cross--agent-10A37F)](https://agentskills.io/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](./templates/shared/requirements.txt)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
-面向 CUMCM、MCM/ICM 与电工杯的端到端数学建模竞赛工作流。它把赛题解析、模型选择、真实代码求解、统计与稳健性、图表、论文、合规检查和最终交付组织成可恢复的 10 个阶段。
+**把“读题 → 建模 → 真实求解 → 统计稳健性 → 论文写作 → 盲审 → 可复现交付”变成一条可恢复、可审计的工程流水线。**
 
-提供赛题和附件时默认进入 **Autopilot**，连续运行到可验证的交付包；只说“开始建模”或明确要求逐步协作时进入 **Guided Mode**。
+<a href="#5-分钟快速开始">快速开始</a> ·
+<a href="#主要能力">能力地图</a> ·
+<a href="#客户端兼容矩阵">安装方式</a> ·
+<a href="#工程设计亮点">设计亮点</a> ·
+<a href="#贡献与社区">参与贡献</a>
+
+</div>
+
+面向 CUMCM、MCM/ICM 与电工杯的端到端数学建模竞赛工作流。提供赛题和附件时默认进入 **Autopilot**，连续运行到可验证的交付包；只说“开始建模”或明确要求逐步协作时进入 **Guided Mode**。
 
 > 本项目协助团队组织和核验工作，不保证获奖，也不会在缺少题面、数据或真实运行结果时补造结论。
 
-> **一句话定位：** 把“读题 → 建模 → 真实求解 → 统计稳健性 → 论文写作 → 盲审 → 可复现交付”固化为一个跨 Agent、可恢复、可审计的工程化工作流。
+<div align="center">
+
+| 10 个阶段 | 3 类竞赛 | 5 个 Agent 生态 | 1 个可复现交付包 |
+|:---:|:---:|:---:|:---:|
+| 状态机驱动 | CUMCM · MCM/ICM · 电工杯 | Codex · Claude · Cursor · Copilot · OpenCode | 代码 · 结果 · 论文 · QA · manifest |
+
+</div>
+
+<details>
+<summary><strong>目录导航</strong></summary>
+
+- [5 分钟快速开始](#5-分钟快速开始)
+- [为什么值得关注](#为什么值得关注)
+- [主要能力](#主要能力)
+- [工程架构](#工程架构)
+- [支持范围](#支持范围)
+- [安装与快速开始](#安装与快速开始)
+- [工程设计亮点](#工程设计亮点)
+- [贡献与社区](#贡献与社区)
+- [开发与验证](#开发与验证)
+- [数据、来源与隐私边界](#数据来源与隐私边界)
+- [License](#license)
+
+</details>
 
 ## 5 分钟快速开始
 
@@ -32,15 +69,36 @@ python examples/quickstart/run_demo.py --output demo-output
 
 示例会生成 `input/`、`state/`、`analysis/`、`results/`（含分配表、灵敏度表和 SVG 图）和带 SHA-256 清单的 `qa/manifest.json`；它不会把结果写回 skill 安装目录。完整说明见 [`examples/quickstart/README.md`](./examples/quickstart/README.md)。安装后，在支持 Agent Skills 的客户端中重新加载 skill，并提供题面和附件即可开始真实竞赛工作流。
 
+<table>
+  <tr>
+    <td><strong>输入</strong><br/><code>problem.md</code> + 附件</td>
+    <td>→</td>
+    <td><strong>状态</strong><br/><code>decision_log.json</code></td>
+    <td>→</td>
+    <td><strong>证据</strong><br/>代码 · 统计 · 图表</td>
+    <td>→</td>
+    <td><strong>交付</strong><br/>论文 · QA · manifest</td>
+  </tr>
+</table>
+
 ## 为什么值得关注
 
 这不是一组一次性提示词，而是一个带有状态、脚本、模板、规则包和回归测试的 Agent Skill：
 
-- **状态化**：所有关键决策、评分、阻塞项和产物定位写入 `state/decision_log.json`，会话中断后可恢复。
-- **证据化**：每个子问题都要求形成“数据 → 预处理 → 模型 → 结果 → 回题结论”的链路，不用模型名称代替真实计算。
-- **可验证**：真实 Python 求解、统计/灵敏度、算法声明一致性、LaTeX/PDF QA 和最终交付机械门彼此衔接。
-- **跨 Agent**：核心入口是标准 `SKILL.md` 目录，可被 Codex、Claude Code、Cursor、VS Code/Copilot、OpenCode 或其他兼容 Agent Skills 的客户端加载。
-- **可审计**：保留 provenance、AI 使用记录、匿名检查、引用核验和版本化 delivery manifest，便于团队复盘、审计和持续维护。
+<table>
+  <tr>
+    <td width="50%"><strong>🧭 状态化</strong><br/>关键决策、评分、阻塞项和产物定位写入 <code>state/decision_log.json</code>，中断后可以从现场恢复。</td>
+    <td width="50%"><strong>🔬 证据化</strong><br/>每个子问题都沿着“数据 → 预处理 → 模型 → 结果 → 回题结论”建立证据链，不用模型名称代替真实计算。</td>
+  </tr>
+  <tr>
+    <td><strong>✅ 可验证</strong><br/>真实 Python 求解、统计/灵敏度、算法声明一致性、LaTeX/PDF QA 和最终交付机械门彼此衔接。</td>
+    <td><strong>🌐 跨 Agent</strong><br/>标准 <code>SKILL.md</code> 入口可被 Codex、Claude Code、Cursor、VS Code/Copilot、OpenCode 或其他兼容客户端加载。</td>
+  </tr>
+  <tr>
+    <td><strong>🧾 可审计</strong><br/>保留 provenance、AI 使用记录、匿名检查、引用核验和版本化 delivery manifest，方便复盘与持续维护。</td>
+    <td><strong>📦 可交付</strong><br/>从题面、代码和结果一路组织到论文/PDF、QA 报告与带哈希的版本化交付目录。</td>
+  </tr>
+</table>
 
 ## 公开版定位与贡献
 
@@ -269,6 +327,7 @@ Skill 会在用户的赛题工作区生成可复核的目录，而不是把结�
 ```text
 .codex-plugin/plugin.json       # Codex plugin manifest（可选）
 .github/                        # CI、Issue/PR 模板、Dependabot、CODEOWNERS
+assets/                         # README 横幅与公开版视觉资源
 agents/openai.yaml              # Codex UI 元数据（可选）
 skills/mathmodel-skill/         # Codex plugin 入口 shim（可选）
 SKILL.md                        # 跨 Agent 的主工作流入口
