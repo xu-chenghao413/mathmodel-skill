@@ -28,7 +28,7 @@
   <g font-family="Inter,Segoe UI,Arial,sans-serif">
     <text x="68" y="92" font-size="48" font-weight="700" letter-spacing="-1" fill="#ffffff">mathmodel-skill</text>
     <rect x="70" y="116" width="92" height="4" rx="2" fill="url(#accent)"/>
-    <text x="68" y="156" font-size="22" fill="#dbe5ff">From problem statement to reproducible delivery.</text>
+    <text x="68" y="156" font-size="22" fill="#dbe5ff">From problem to reproducible delivery.</text>
     <text x="68" y="191" font-size="15" fill="#aeb9d8">CUMCM · MCM/ICM · Diangong Cup · cross-agent · auditable</text>
 
     <g transform="translate(68 238)">
