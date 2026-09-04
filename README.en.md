@@ -1,7 +1,7 @@
 # mathmodel-skill
 
 <div align="center">
-  <img src="./assets/mathmodel-hero.svg" alt="mathmodel-skill: a ten-stage mathematical modelling workflow from problem statement to reproducible delivery" width="100%" />
+  <img src="./assets/mathmodel-hero-v2.svg" alt="mathmodel-skill: a ten-stage mathematical modelling workflow from problem statement to reproducible delivery" width="100%" />
 </div>
 
 <div align="center">
