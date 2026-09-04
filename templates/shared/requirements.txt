@@ -11,7 +11,7 @@ seaborn>=0.12
 # 优化
 cvxpy>=1.4
 cvxopt>=1.3        # cvxpy GLPK 后端依赖
-pulp>=2.7          # MILP 备选
+pulp>=3.3.2          # MILP 备选
 # gurobipy>=11.0   # 可选, 商用求解器 (有学生 license)
 
 # 机器学习
