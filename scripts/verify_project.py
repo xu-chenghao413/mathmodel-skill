@@ -8,6 +8,7 @@ import json
 import os
 import subprocess
 import sys
+import re
 from pathlib import Path
 
 try:
@@ -32,9 +33,22 @@ REQUIRED_PATHS = (
     "scripts/status.py",
     "scripts/console.py",
     "scripts/build_sbom.py",
+    "scripts/validate_eval.py",
+    "scripts/verify_release.py",
+    "evals/README.md",
+    "evals/cases/cumcm_autopilot_blocked.json",
+    "evals/cases/mcm_guided_confirmation.json",
+    "evals/cases/diangong_delivery_gate.json",
+    "pyproject.toml",
+    "uv.lock",
+    "competitions/cumcm/empirical_manifest.json",
+    "docs/README.md",
+    "GOVERNANCE.md",
+    "SUPPORT.md",
     "examples/quickstart/run_demo.py",
     ".github/workflows/ci.yml",
     ".github/workflows/release.yml",
+    ".github/workflows/security.yml",
 )
 CLI_ENTRYPOINTS = (
     "scripts/doctor.py",
@@ -43,6 +57,8 @@ CLI_ENTRYPOINTS = (
     "scripts/score_artifact.py",
     "scripts/render_paper.py",
     "scripts/validate_delivery.py",
+    "scripts/validate_eval.py",
+    "scripts/verify_release.py",
     "examples/quickstart/run_demo.py",
 )
 
@@ -91,7 +107,7 @@ def _check_metadata(errors: list[str]) -> None:
         return
     version = plugin["version"]
     expected = f"v{version}"
-    for relative in ("README.md", "SKILL.md", "AGENTS.md"):
+    for relative in ("README.md", "README.en.md", "SKILL.md", "AGENTS.md"):
         text = (ROOT / relative).read_text(encoding="utf-8")
         if expected not in text:
             errors.append(f"{relative} does not mention current version {expected}")
@@ -100,6 +116,18 @@ def _check_metadata(errors: list[str]) -> None:
         errors.append(f"CHANGELOG.md has no entry for {version}")
     if plugin.get("name") != "mathmodel-skill":
         errors.append("plugin name must remain mathmodel-skill")
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    if f'version = "{version}"' not in pyproject:
+        errors.append("pyproject.toml does not match plugin version")
+
+
+def _check_action_pins(errors: list[str]) -> None:
+    action_pattern = re.compile(r"^\s*uses:\s*([^@\s]+)@([^\s#]+)", re.MULTILINE)
+    for path in sorted((ROOT / ".github" / "workflows").glob("*.y*ml")):
+        text = path.read_text(encoding="utf-8")
+        for action, ref in action_pattern.findall(text):
+            if not re.fullmatch(r"[0-9a-f]{40}", ref):
+                errors.append(f"workflow action is not pinned to a commit SHA: {path.relative_to(ROOT)} ({action}@{ref})")
 
 
 def _check_cli() -> list[str]:
@@ -141,6 +169,7 @@ def main(argv: list[str] | None = None) -> int:
         errors.append(f"metadata check failed: {exc}")
     json_count = _check_json_files(errors)
     yaml_count = _check_yaml_files(errors, args.require_yaml)
+    _check_action_pins(errors)
     if args.check_cli:
         errors.extend(_check_cli())
     if errors:

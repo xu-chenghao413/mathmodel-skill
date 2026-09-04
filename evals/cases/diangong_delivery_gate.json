@@ -1,0 +1,20 @@
+{
+  "id": "diangong_delivery_gate",
+  "description": "A delivery-ready run must declare the gate and its artifacts.",
+  "competition": "diangong",
+  "mode": "autopilot",
+  "state": {
+    "competition": "diangong",
+    "execution": {"interaction_mode": "autopilot", "blockers": []},
+    "stages": {"9": {"submission_ready": true}},
+    "artifacts": {"paper.pdf": "results/paper.pdf", "source_code": "results/source_code"}
+  },
+  "transcript": [
+    {"event": "delivery_gate_passed"},
+    {"event": "artifacts_declared", "artifacts": ["paper.pdf", "source_code"]}
+  ],
+  "required_blockers": [],
+  "required_events": ["delivery_gate_passed", "artifacts_declared"],
+  "required_artifacts": ["paper.pdf", "source_code"],
+  "forbidden_claims": ["missing evidence"]
+}

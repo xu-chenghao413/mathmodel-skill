@@ -40,6 +40,18 @@ python scripts/status.py --workspace ./my-contest --require-ready
 python scripts/verify_project.py --check-cli --require-yaml
 ```
 
+### `validate_eval.py` — Agent 行为契约评测
+
+验证公开版 skill 的跨客户端不变量：竞赛/模式明确、缺证据时产生
+blocker、Guided Mode 在关键决策处请求确认，以及交付门只在产物齐全时放行。
+内置 fixture 可离线运行；真实运行可额外传入工作区和 JSON/JSONL 事件记录：
+
+```bash
+python scripts/validate_eval.py --list-cases
+python scripts/validate_eval.py --case cumcm_autopilot_blocked \
+  --workspace ./team-workspace --transcript ./qa/run.jsonl --json
+```
+
 ### `build_sbom.py` — 源码 SBOM
 
 按文件生成带 SHA-256 哈希的 CycloneDX 风格 SBOM；Release workflow 会把它作为发布资产，并对源码归档生成 GitHub 构建证明。

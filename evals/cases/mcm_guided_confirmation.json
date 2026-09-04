@@ -1,0 +1,18 @@
+{
+  "id": "mcm_guided_confirmation",
+  "description": "Guided mode must expose a confirmation before a consequential choice.",
+  "competition": "mcm",
+  "mode": "guided",
+  "state": {
+    "competition": "mcm",
+    "execution": {"interaction_mode": "guided", "blockers": []},
+    "current_stage": 3,
+    "stages": {"9": {"submission_ready": false}}
+  },
+  "transcript": [
+    {"event": "confirmation_requested", "decision": "primary_model"}
+  ],
+  "required_blockers": [],
+  "required_events": ["confirmation_requested"],
+  "forbidden_claims": ["submission_ready"]
+}

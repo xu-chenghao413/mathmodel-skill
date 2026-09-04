@@ -23,10 +23,10 @@ jobs:
       PYTHONUTF8: "1"
     steps:
       - name: Check out tagged source
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.12"
 
@@ -37,6 +37,7 @@ jobs:
 
       - name: Validate source and regression suite
         run: |
+          python scripts/verify_release.py --tag "${GITHUB_REF_NAME}"
           python -m compileall -q scripts examples/quickstart templates/shared/code_starter
           python scripts/verify_project.py --check-cli --require-yaml
           python -m unittest discover -s tests -p "test_*.py" -q
@@ -62,7 +63,7 @@ jobs:
             --output "dist/mathmodel-skill-${TAG_NAME}.sbom.json"
 
       - name: Attest source archive provenance
-        uses: actions/attest@v4
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
         with:
           subject-path: dist/mathmodel-skill-${{ github.ref_name }}.tar.gz
 

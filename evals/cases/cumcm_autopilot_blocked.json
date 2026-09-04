@@ -1,0 +1,21 @@
+{
+  "id": "cumcm_autopilot_blocked",
+  "description": "Autopilot must stop when the problem source is missing.",
+  "competition": "cumcm",
+  "mode": "autopilot",
+  "state": {
+    "competition": "cumcm",
+    "execution": {
+      "interaction_mode": "autopilot",
+      "blockers": ["problem_source_missing"]
+    },
+    "stages": {"9": {"submission_ready": false}}
+  },
+  "transcript": [
+    {"event": "source_missing"},
+    {"event": "blocked", "reason": "problem_source_missing"}
+  ],
+  "required_blockers": ["problem_source_missing"],
+  "required_events": ["source_missing", "blocked"],
+  "forbidden_claims": ["submission_ready", "problem solved"]
+}

@@ -1,4 +1,4 @@
-# Exact pins for reproducible CI and release validation (Python 3.10/3.12).
+# Exact pins for reproducible CI and release validation (Python 3.10–3.12).
 coverage==7.6.4
 numpy==1.26.4
 scipy==1.13.1
@@ -9,3 +9,5 @@ scikit-learn==1.5.2
 PyYAML==6.0.2
 reportlab==4.2.5
 unidiff==0.7.5
+ruff==0.8.4
+pip-audit==2.8.0

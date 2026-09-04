@@ -11,10 +11,10 @@
 
 <br/>
 
-[![Version](https://img.shields.io/badge/version-v7.4.5-blueviolet)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v7.4.6-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-cross--agent-10A37F)](https://agentskills.io/)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](./templates/shared/requirements.txt)
+[![Python](https://img.shields.io/badge/Python-3.10--3.12-3776AB?logo=python&logoColor=white)](./pyproject.toml)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
 <a href="#5-minute-quickstart"><img src="https://img.shields.io/badge/5--min%20install-111827?style=for-the-badge" alt="5-minute install" /></a>
@@ -78,7 +78,7 @@ These are executable repository entry points, not just feature labels:
   </tr>
 </table>
 
-See the complete [scripts index](./scripts/README.md). Start with the offline demo, then bring the workflow to a real contest problem.
+See the complete [scripts index](./scripts/README.md) and [maintainer docs](./docs/). Start with the offline demo, then bring the workflow to a real contest problem.
 
 ## Interactive entry points
 
@@ -157,7 +157,7 @@ python scripts/build_ai_disclosure.py --log ./my-contest/qa/ai_usage_log.json \
 python scripts/validate_delivery.py --workspace ./my-contest
 python scripts/package_delivery.py --workspace ./my-contest
 python scripts/build_sbom.py --source . --output ./my-contest/qa/sbom.json \
-  --version v7.4.5
+  --version v7.4.6
 ```
 
 The last two commands are delivery gates: run them after the paper, code, results and compliance checks are complete. A failed gate preserves blockers instead of fabricating `submission-ready`.
@@ -216,7 +216,7 @@ No. The demo uses deterministic synthetic data from this repository to verify in
 <details>
 <summary><strong>How do I contribute safely?</strong></summary>
 
-Read [`CONTRIBUTING.md`](./CONTRIBUTING.md), reproduce issues with synthetic data, and do not upload private team material, credentials, unlicensed papers or third-party templates. Report security issues through [`SECURITY.md`](./SECURITY.md).
+Read [`CONTRIBUTING.md`](./CONTRIBUTING.md), reproduce issues with synthetic data, and do not upload private team material, credentials, unlicensed papers or third-party templates. See [`SUPPORT.md`](./SUPPORT.md) for compatibility and [`SECURITY.md`](./SECURITY.md) for private reports.
 </details>
 
 ## 5-minute quickstart
@@ -332,9 +332,10 @@ Unless a file says otherwise, maintainer-authored code, documentation and templa
 ## Development
 
 ```bash
-python -m unittest discover -s tests -v
-python scripts/verify_project.py --check-cli --require-yaml
-python scripts/doctor.py
+uv sync --locked --extra dev
+uv run python -m unittest discover -s tests -v
+uv run python scripts/verify_project.py --check-cli --require-yaml
+uv run python scripts/doctor.py
 ```
 
-See [`CHANGELOG.md`](./CHANGELOG.md) for releases and [`README.md`](./README.md) for the complete Chinese workflow, compliance notes and installation details.
+See [`CHANGELOG.md`](./CHANGELOG.md) for releases, [`docs/`](./docs/) for maintainer workflows and [`README.md`](./README.md) for the complete Chinese workflow, compliance notes and installation details.

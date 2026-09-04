@@ -11,10 +11,10 @@
 
 <br/>
 
-[![Version](https://img.shields.io/badge/version-v7.4.5-blueviolet)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v7.4.6-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-cross--agent-10A37F)](https://agentskills.io/)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](./templates/shared/requirements.txt)
+[![Python](https://img.shields.io/badge/Python-3.10--3.12-3776AB?logo=python&logoColor=white)](./pyproject.toml)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
 <a href="#5-分钟快速开始"><img src="https://img.shields.io/badge/5--min%20install-111827?style=for-the-badge" alt="5-minute install" /></a>
@@ -25,7 +25,8 @@
 <a href="#交互式上手">交互式上手</a> ·
 <a href="#主要能力">能力地图</a> ·
 <a href="#安装与快速开始">安装方式</a> ·
-<a href="#贡献与社区">参与贡献</a>
+<a href="#贡献与社区">参与贡献</a> ·
+<a href="./docs/">维护文档</a>
 
 <br/>
 <em>Autopilot when you want momentum · Guided Mode when you want control</em>
@@ -74,7 +75,7 @@
   </tr>
 </table>
 
-完整脚本索引见 [`scripts/README.md`](./scripts/README.md)，建议先运行离线 Demo，再接入真实赛题。
+完整脚本索引见 [`scripts/README.md`](./scripts/README.md)，维护者入口见 [`docs/`](./docs/)，建议先运行离线 Demo，再接入真实赛题。
 
 ## 交互式上手
 
@@ -153,7 +154,7 @@ python scripts/build_ai_disclosure.py --log ./my-contest/qa/ai_usage_log.json \
 python scripts/validate_delivery.py --workspace ./my-contest
 python scripts/package_delivery.py --workspace ./my-contest
 python scripts/build_sbom.py --source . --output ./my-contest/qa/sbom.json \
-  --version v7.4.5
+  --version v7.4.6
 ```
 
 最后两个命令是交付门：只在论文、代码、结果和合规检查完成后运行；校验失败会保留 blocker，不会伪造 `submission-ready`。
@@ -433,7 +434,7 @@ git clone https://github.com/xu-chenghao413/mathmodel-skill.git .cursor/skills/m
 
 ### 运行环境
 
-- Python 3.10+；依赖见 [`templates/shared/requirements.txt`](./templates/shared/requirements.txt)。
+- Python 3.10–3.12（CI 覆盖三版本）；开发与验证依赖由 `uv.lock` 锁定，竞赛运行时依赖见 [`templates/shared/requirements.txt`](./templates/shared/requirements.txt)。
 - 只做题面解析、建模和代码求解时，Python 依赖通常足够。
 - 需要论文/PDF 时，再安装 Pandoc、XeLaTeX（CUMCM/电工杯）或 pdfLaTeX（MCM/ICM）；`python scripts/doctor.py` 会报告缺少的工具。
 - 如果客户端没有原生问答 UI，skill 会退回 Markdown 编号选项；用户不需要手动编辑 JSON。
@@ -540,7 +541,7 @@ Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https:
 
 ## 设计影响与可选集成
 
-本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.4.5 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
+本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.4.6 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
 
 历史来源之一是 [handsomeZR-netizen/mathmodel-skill](https://github.com/handsomeZR-netizen/mathmodel-skill)。其 MIT 通知适用于相应历史部分；本公开版的新增和修改由 `xu-chenghao413` 维护。该链接用于来源和许可证核对，不表示本仓库属于原仓库所有者。
 
@@ -589,14 +590,15 @@ py "$env:USERPROFILE\.codex\skills\.system\skill-installer\scripts\install-skill
 ## 开发与验证
 
 ```bash
-python -m unittest discover -s tests -v
-python scripts/verify_project.py --check-cli --require-yaml
-python scripts/doctor.py
+uv sync --locked --extra dev
+uv run python -m unittest discover -s tests -v
+uv run python scripts/verify_project.py --check-cli --require-yaml
+uv run python scripts/doctor.py
 ```
 
 CI 与发布使用 [`.github/requirements-ci.txt`](./.github/requirements-ci.txt) 中的精确版本；用户运行时仍可按 [`templates/shared/requirements.txt`](./templates/shared/requirements.txt) 的兼容下限安装依赖。
 
-GitHub Actions 在每次 push / pull request 上用 Python 3.10 和 3.12、Ubuntu/macOS/Windows 三平台执行源码编译、回归测试、结构与 CLI 校验、覆盖率基线，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；独立的安装冒烟任务还会安装便携 payload 并运行合成 quickstart。覆盖率报告作为 CI artifact 保存，当前门槛为 30% 以防止基线倒退。本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
+GitHub Actions 在每次 push / pull request 上用 Python 3.10–3.12、Ubuntu/macOS/Windows 三平台执行源码编译、回归测试、结构与 CLI 校验、契约评测、覆盖率基线，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；独立的安装冒烟任务还会安装便携 payload 并运行合成 quickstart。`security.yml` 另外执行 CodeQL、Gitleaks、pip-audit 和 Ruff。覆盖率报告作为 CI artifact 保存，当前门槛为 30% 以防止基线倒退。本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
 
 发布采用版本号、`CHANGELOG.md` 和 annotated tag 对齐的方式；推送 `v*` tag 后，Release workflow 会重新执行验证，并生成带 SHA-256 校验文件和 SBOM 的源码归档，同时使用 GitHub Artifact Attestations 生成构建来源证明。
 
@@ -606,7 +608,7 @@ GitHub Actions 在每次 push / pull request 上用 Python 3.10 和 3.12、Ubunt
 - 仓库和完整 Git 历史不存在论文 PDF、用户案例或未授权模板；
 - 所有 JSON/YAML 可解析，结构与 CLI 校验通过，测试全绿，示例命令能在干净环境运行。
 
-贡献方式见 [`CONTRIBUTING.md`](./CONTRIBUTING.md)，安全问题见 [`SECURITY.md`](./SECURITY.md)，版本变化见 [`CHANGELOG.md`](./CHANGELOG.md)。
+贡献方式见 [`CONTRIBUTING.md`](./CONTRIBUTING.md)，维护决策见 [`GOVERNANCE.md`](./GOVERNANCE.md)，支持范围见 [`SUPPORT.md`](./SUPPORT.md)，安全问题见 [`SECURITY.md`](./SECURITY.md)，版本变化见 [`CHANGELOG.md`](./CHANGELOG.md)。
 
 ## 边界与限制
 

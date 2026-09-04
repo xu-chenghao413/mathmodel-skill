@@ -4,7 +4,7 @@ description: "Portable Agent Skills workflow for CUMCM, MCM/ICM, and Diangong Cu
 license: MIT
 ---
 
-# mathmodel-skill — 数学建模三竞赛通用 Skill (v7.4.5)
+# mathmodel-skill — 数学建模三竞赛通用 Skill (v7.4.6)
 
 10 阶段把"3-4 天打 1 篇竞赛论文"工程化。用户直接给出赛题时默认 **Autopilot 一键交付**：自动完成读题、建模、代码求解、统计/制图、引用、论文、PDF 视觉 QA 与交付清单；只说“开始建模”时保留编号问答式 Guided Mode。每阶段产出经过 rubric 自评、section-level patch、跨阶段回检与终局互盲评审。
 
@@ -42,7 +42,7 @@ license: MIT
 
 ## Harness 兼容与降级策略
 
-本 skill v7.4.5 以标准 `SKILL.md` 为一等入口，同时保持 harness-agnostic 设计:
+本 skill v7.4.6 以标准 `SKILL.md` 为一等入口，同时保持 harness-agnostic 设计:
 
 | harness | 入口/发现 | 用户交互工具 | 状态文件 |
 |---------|---------|-------------|---------|

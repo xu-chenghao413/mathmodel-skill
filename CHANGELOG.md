@@ -2,6 +2,13 @@
 
 All notable public changes are recorded here.
 
+## 7.4.6
+
+- Aligned the public skill, plugin manifest, documentation and release metadata at `v7.4.6`.
+- Added provider-agnostic contract evaluations for competition, mode, evidence and delivery-gate behavior.
+- Added locked development dependencies, a reproducibility manifest, Python 3.10–3.12 CI coverage and security automation.
+- Expanded maintainer, contribution, support and release-verification documentation.
+
 ## 7.4.5
 
 - Preserved caller-visible installer paths across macOS `/private` symlinks and Windows 8.3 temporary-path aliases while retaining canonical safety checks.

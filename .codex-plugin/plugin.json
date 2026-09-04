@@ -1,6 +1,6 @@
 {
   "name": "mathmodel-skill",
-  "version": "7.4.5",
+  "version": "7.4.6",
   "description": "Autopilot and guided end-to-end delivery skill for CUMCM, MCM/ICM, and Diangong Cup, with reproducibility, review, compliance, and versioned delivery folders.",
   "author": {
     "name": "xu-chenghao413",
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "Math Modeling Skill",
     "shortDescription": "赛题到可复现论文/PDF交付包的一键数模与终审工作流",
-    "longDescription": "A Codex-native mathematical modeling competition skill with guided and autopilot modes. Given a problem and attachments, it produces executable models, verified results, statistics, figures, citations, a competition-specific paper/PDF, blind review artifacts, and one versioned delivery folder. Optional external skills are invoked only when separately installed; their source code is not bundled.",
+    "longDescription": "A provider-agnostic Agent Skill for mathematical modeling competitions with guided and autopilot modes. Given a problem and attachments, it produces executable models, verified results, statistics, figures, citations, a competition-specific paper/PDF, blind review artifacts, and one versioned delivery folder. Optional external skills are invoked only when separately installed; their source code is not bundled.",
     "developerName": "xu-chenghao413",
     "category": "Education",
     "capabilities": [

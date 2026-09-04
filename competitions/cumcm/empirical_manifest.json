@@ -1,0 +1,16 @@
+{
+  "schema": "mathmodel-skill/empirical-manifest/v1",
+  "competition": "cumcm",
+  "dataset": "empirical.json",
+  "status": "aggregate-only",
+  "observed_documents": 91,
+  "extracted_documents": 59,
+  "year_range": [2023, 2025],
+  "last_verified": "2026-05-05",
+  "generator": "scripts/ingest_papers.py",
+  "raw_inputs_public": false,
+  "rebuild_note": "Raw papers and extracted text are intentionally excluded. A clean checkout can validate the aggregate schema and provenance, but cannot independently rebuild the measurements without lawfully obtained source files.",
+  "public_fields": ["source", "dims", "quality_signals", "by_topic"],
+  "excluded_fields": ["pdf", "ocr_text", "source_filenames", "private_team_metadata"],
+  "provenance": "PROVENANCE.md"
+}

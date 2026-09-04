@@ -4,8 +4,10 @@
 
 ## Validation
 
-- [ ] `python -m unittest discover -s tests -v`
-- [ ] `python scripts/doctor.py --skip-tools`
+- [ ] `uv sync --locked --extra dev`
+- [ ] `uv run python -m unittest discover -s tests -v`
+- [ ] `uv run python scripts/doctor.py --skip-tools`
+- [ ] `uv run python scripts/validate_eval.py --list-cases` (when behavior/tooling changes)
 - [ ] I added or updated behavioral tests for script/tooling changes.
 - [ ] I updated documentation or changelog when the public behavior changed.
 
