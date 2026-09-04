@@ -1,7 +1,7 @@
 # mathmodel-skill
 
 <div align="center">
-  <img src="./assets/mathmodel-banner.svg" alt="mathmodel-skill：从赛题到可复现交付包的十阶段数学建模工作流" width="100%" />
+  <img src="./assets/mathmodel-hero.svg" alt="mathmodel-skill：从赛题到可复现交付包的十阶段数学建模工作流" width="100%" />
 </div>
 
 <div align="center">
