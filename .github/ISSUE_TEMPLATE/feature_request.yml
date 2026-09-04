@@ -1,0 +1,38 @@
+name: Feature request
+description: Suggest a focused improvement to the workflow or its tooling.
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please describe a concrete user need. Proposals should preserve reproducibility,
+        evidence boundaries, competition-rule precedence, and privacy safeguards.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What workflow gap or user pain does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Explain the smallest useful change and any new artifacts or interfaces.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This request does not require bundling private data or unlicensed third-party material.
+          required: true

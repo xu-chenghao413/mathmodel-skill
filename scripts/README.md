@@ -20,6 +20,8 @@ python /path/to/mathmodel-skill/scripts/install_skill.py \
 
 安装器会保留 `SKILL.md`、`references/`、`competitions/`、`templates/`、`scripts/` 和 `config/`，排除 `.git`、CI、测试和生成中的用户工作区；相对路径仍以 skill 根目录为基准。
 
+安装后的便携 payload 可以直接运行 `python scripts/doctor.py --skip-tools`。Codex 的 `agents/openai.yaml`、`.codex-plugin/plugin.json` 和 plugin shim 属于可选元数据；在完整源码 checkout 中如需强制检查它们，可运行 `python scripts/doctor.py --require-codex --skip-tools`。
+
 ---
 
 ## 运行时脚本 (各 stage 调用)

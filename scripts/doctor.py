@@ -111,6 +111,7 @@ def run_checks(
     check_tools: bool = True,
     require_renderer: bool = False,
     require_modeling: bool = False,
+    require_codex: bool = False,
 ) -> list[Check]:
     checks: list[Check] = []
 
@@ -125,8 +126,6 @@ def run_checks(
     required_paths = (
         "SKILL.md",
         "AGENTS.md",
-        "agents/openai.yaml",
-        ".codex-plugin/plugin.json",
         "config/dim_weights.json",
         "templates/shared/decision_log.json",
         "scripts/score_artifact.py",
@@ -150,12 +149,31 @@ def run_checks(
     shim_name = _frontmatter_name(SKILL_ROOT / "skills" / "mathmodel-skill" / "SKILL.md")
     checks.append(_check(
         "skill-metadata",
-        skill_name == "mathmodel-skill" and shim_name == "mathmodel-skill",
+        skill_name == "mathmodel-skill",
         f"root={skill_name!r}, plugin-shim={shim_name!r}",
     ))
 
+    codex_paths = (
+        "agents/openai.yaml",
+        ".codex-plugin/plugin.json",
+        "skills/mathmodel-skill/SKILL.md",
+    )
+    missing_codex = [item for item in codex_paths if not (SKILL_ROOT / item).is_file()]
+    codex_check = _check if require_codex else _optional
+    checks.append(codex_check(
+        "codex-integration",
+        not missing_codex,
+        "Codex metadata and plugin shim present"
+        if not missing_codex else (
+            "portable payload: Codex metadata omitted"
+            if len(missing_codex) == len(codex_paths)
+            else f"missing: {', '.join(missing_codex)}"
+        ),
+        "Run doctor from the full checkout or install the Codex plugin metadata."
+        if missing_codex else None,
+    ))
+
     json_paths = [
-        SKILL_ROOT / ".codex-plugin" / "plugin.json",
         SKILL_ROOT / "config" / "dim_weights.json",
         SKILL_ROOT / "templates" / "shared" / "decision_log.json",
         SKILL_ROOT / "templates" / "shared" / "ai_usage_ledger.json",
@@ -166,6 +184,9 @@ def run_checks(
             SKILL_ROOT / "competitions" / comp / "topic_specs.json",
             SKILL_ROOT / "competitions" / comp / "empirical.json",
         ))
+    plugin_json = SKILL_ROOT / ".codex-plugin" / "plugin.json"
+    if plugin_json.is_file():
+        json_paths.insert(0, plugin_json)
     invalid_json = []
     parsed: dict[Path, object] = {}
     for path in json_paths:
@@ -366,6 +387,11 @@ def main() -> int:
     parser.add_argument("--skip-tools", action="store_true", help="skip local Pandoc/TeX checks")
     parser.add_argument("--require-renderer", action="store_true")
     parser.add_argument("--require-modeling", action="store_true")
+    parser.add_argument(
+        "--require-codex",
+        action="store_true",
+        help="require Codex UI/plugin metadata (full source checkout only)",
+    )
     args = parser.parse_args()
 
     if args.skip_tools and args.require_renderer:
@@ -377,6 +403,7 @@ def main() -> int:
         check_tools=not args.skip_tools,
         require_renderer=args.require_renderer,
         require_modeling=args.require_modeling,
+        require_codex=args.require_codex,
     )
     if args.as_json:
         print(json.dumps([asdict(item) for item in checks], ensure_ascii=False, indent=2))

@@ -1,6 +1,6 @@
 # mathmodel-skill
 
-[![Version](https://img.shields.io/badge/version-v7.4.0-blueviolet)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v7.4.1-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-cross--agent-10A37F)](https://agentskills.io/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](./templates/shared/requirements.txt)
@@ -176,6 +176,7 @@ git clone https://github.com/xu-chenghao413/mathmodel-skill.git .cursor/skills/m
 - 只做题面解析、建模和代码求解时，Python 依赖通常足够。
 - 需要论文/PDF 时，再安装 Pandoc、XeLaTeX（CUMCM/电工杯）或 pdfLaTeX（MCM/ICM）；`python scripts/doctor.py` 会报告缺少的工具。
 - 如果客户端没有原生问答 UI，skill 会退回 Markdown 编号选项；用户不需要手动编辑 JSON。
+- 从安装后的便携目录运行 `python scripts/doctor.py --skip-tools` 可检查运行时 payload；完整源码 checkout 还可用 `--require-codex` 检查 Codex 专属元数据。
 
 状态默认写入当前赛题工作区的 `state/decision_log.json`，不会写入 skill 安装目录，因此同一个工作区可以在不同 Agent 之间接力。
 
@@ -249,6 +250,7 @@ Skill 会在用户的赛题工作区生成可复核的目录，而不是把结�
 
 ```text
 .codex-plugin/plugin.json       # Codex plugin manifest（可选）
+.github/                        # CI、Issue/PR 模板、Dependabot、CODEOWNERS
 agents/openai.yaml              # Codex UI 元数据（可选）
 skills/mathmodel-skill/         # Codex plugin 入口 shim（可选）
 SKILL.md                        # 跨 Agent 的主工作流入口
@@ -276,7 +278,7 @@ Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https:
 
 ## 设计影响与可选集成
 
-本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.4.0 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
+本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.4.1 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
 
 历史来源之一是 [handsomeZR-netizen/mathmodel-skill](https://github.com/handsomeZR-netizen/mathmodel-skill)。其 MIT 通知适用于相应历史部分；本公开版的新增和修改由 `xu-chenghao413` 维护。该链接用于来源和许可证核对，不表示本仓库属于原仓库所有者。
 
@@ -318,6 +320,10 @@ py "$env:USERPROFILE\.codex\skills\.system\skill-installer\scripts\install-skill
 
 这些设计让项目既能直接用于竞赛协作，也便于复盘、测试、二次开发和团队内交接。
 
+## 贡献与社区
+
+欢迎围绕可复现行为提交 issue 或 pull request。请先阅读 [`CONTRIBUTING.md`](./CONTRIBUTING.md)，并使用合成数据描述问题；不要上传队伍信息、未公开论文、凭据或任何未经授权的第三方材料。安全问题请按 [`SECURITY.md`](./SECURITY.md) 的私下报告流程处理，行为规范见 [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md)。
+
 ## 开发与验证
 
 ```bash
@@ -325,7 +331,9 @@ python -m unittest discover -s tests -v
 python scripts/doctor.py
 ```
 
-GitHub Actions 在每次 push / pull request 上用 Python 3.10 和 3.12 执行源码编译、90 项回归测试，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
+GitHub Actions 在每次 push / pull request 上用 Python 3.10 和 3.12 执行源码编译、91 项回归测试，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
+
+发布采用版本号、`CHANGELOG.md` 和 annotated tag 对齐的方式；推送 `v*` tag 后，Release workflow 会重新执行验证，并生成带 SHA-256 校验文件的源码归档。
 
 提交前还应检查：
 

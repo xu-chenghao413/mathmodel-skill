@@ -2,6 +2,11 @@
 
 All notable public changes are recorded here.
 
+## 7.4.1
+
+- Fixed portable-payload self-checks by making Codex-only metadata optional and adding an installed-package doctor regression test.
+- Updated GitHub Actions to the current Node 24-compatible action majors and added issue/PR templates, CODEOWNERS, Dependabot, and a code of conduct.
+
 ## 7.4.0
 
 - Added cross-Agent Skills installation guidance for Codex, Claude Code, Cursor, VS Code/Copilot, OpenCode, and generic compatible clients.

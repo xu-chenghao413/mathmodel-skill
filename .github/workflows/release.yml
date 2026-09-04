@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Validate and publish release assets
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MPLBACKEND: Agg
+      MPLCONFIGDIR: /tmp/mathmodel-matplotlib
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install validation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install PyYAML reportlab unidiff numpy scipy pandas matplotlib seaborn scikit-learn
+
+      - name: Validate source and regression suite
+        run: |
+          python -m compileall -q scripts templates/shared/code_starter
+          python -m unittest discover -s tests -p "test_*.py" -q
+          python scripts/doctor.py --competition cumcm --skip-tools --require-codex
+          python scripts/doctor.py --competition mcm --skip-tools
+          python scripts/doctor.py --competition diangong --skip-tools
+
+      - name: Build source archive and checksum
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          mkdir -p dist
+          git archive --format=tar.gz --prefix="mathmodel-skill-${TAG_NAME}/" "${TAG_NAME}" -o "dist/mathmodel-skill-${TAG_NAME}.tar.gz"
+          sha256sum "dist/mathmodel-skill-${TAG_NAME}.tar.gz" > "dist/mathmodel-skill-${TAG_NAME}.tar.gz.sha256"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          gh release create "${TAG_NAME}" \
+            "dist/mathmodel-skill-${TAG_NAME}.tar.gz" \
+            "dist/mathmodel-skill-${TAG_NAME}.tar.gz.sha256" \
+            --title "mathmodel-skill ${TAG_NAME}" \
+            --generate-notes

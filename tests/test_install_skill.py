@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import importlib.util
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -68,6 +70,30 @@ class InstallSkillTests(unittest.TestCase):
 
             with self.assertRaises(ValueError):
                 install_skill.install_payload(source, source / "nested")
+
+    def test_installed_portable_payload_passes_doctor(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "installed"
+            install_skill.install_payload(ROOT, destination)
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(destination / "scripts" / "doctor.py"),
+                    "--competition",
+                    "cumcm",
+                    "--skip-tools",
+                ],
+                cwd=destination,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("codex-integration", result.stdout)
+            self.assertIn("portable payload", result.stdout)
 
 
 if __name__ == "__main__":
