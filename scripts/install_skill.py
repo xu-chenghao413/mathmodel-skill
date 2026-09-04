@@ -91,10 +91,14 @@ def _assert_safe_destination(source: Path, destination: Path) -> None:
 def install_payload(source: Path, destination: Path) -> list[Path]:
     """Copy the runtime payload and return the paths created under destination."""
     source = source.resolve()
-    destination = destination.resolve()
+    # Keep the caller's lexical destination for returned paths.  macOS may
+    # expose /var through /private and Windows may expose TEMP through an 8.3
+    # alias; canonicalize only for safety checks, not for API-visible paths.
+    destination = destination.expanduser()
+    resolved_destination = destination.resolve()
     if not (source / "SKILL.md").is_file():
         raise FileNotFoundError(f"missing skill entrypoint: {source / 'SKILL.md'}")
-    _assert_safe_destination(source, destination)
+    _assert_safe_destination(source, resolved_destination)
     if destination.exists():
         raise FileExistsError(
             f"destination already exists: {destination}; refusing to overwrite"

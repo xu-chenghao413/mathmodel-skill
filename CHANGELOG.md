@@ -2,6 +2,10 @@
 
 All notable public changes are recorded here.
 
+## 7.4.5
+
+- Preserved caller-visible installer paths across macOS `/private` symlinks and Windows 8.3 temporary-path aliases while retaining canonical safety checks.
+
 ## 7.4.4
 
 - Fixed GitHub Actions portability by using the supported `github.workspace` context for the cross-platform Matplotlib cache path.
