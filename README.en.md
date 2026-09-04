@@ -7,7 +7,7 @@
 <div align="center">
 
 <strong>From a problem statement to a reproducible, reviewable, handoff-ready modelling package.</strong><br/>
-<sub>A stateful, evidence-first workflow for CUMCM, MCM/ICM and Diangong Cup teams.</sub>
+<em>A stateful, evidence-first workflow for CUMCM, MCM/ICM and Diangong Cup teams.</em>
 
 <br/>
 
@@ -27,7 +27,7 @@
 <a href="#contributing">Contributing</a>
 
 <br/>
-<sub>Autopilot when you want momentum · Guided Mode when you want control</sub>
+<em>Autopilot when you want momentum · Guided Mode when you want control</em>
 
 </div>
 
@@ -45,14 +45,14 @@
 
 <table>
   <tr>
-    <td width="33%"><strong>🚀 Keep momentum</strong><br/><sub>Autopilot runs the full route from source packet to delivery. Guided Mode lets the team approve high-impact decisions.</sub></td>
-    <td width="33%"><strong>🔬 Keep evidence</strong><br/><sub>Every subproblem follows data → preprocessing → model → result → answer, backed by real executable code.</sub></td>
-    <td width="33%"><strong>🔁 Keep context</strong><br/><sub>Decisions, blockers and artifact paths live in <code>state/decision_log.json</code>, so interruptions do not erase progress.</sub></td>
+    <td width="33%"><strong>🚀 Keep momentum</strong><br/>Autopilot runs the full route from source packet to delivery. Guided Mode lets the team approve high-impact decisions.</td>
+    <td width="33%"><strong>🔬 Keep evidence</strong><br/>Every subproblem follows data → preprocessing → model → result → answer, backed by real executable code.</td>
+    <td width="33%"><strong>🔁 Keep context</strong><br/>Decisions, blockers and artifact paths live in <code>state/decision_log.json</code>, so interruptions do not erase progress.</td>
   </tr>
   <tr>
-    <td><strong>✅ Keep honest</strong><br/><sub>Mechanical gates catch missing runs, inconsistent algorithm claims, citation gaps, PDF issues and delivery drift.</sub></td>
-    <td><strong>🌐 Keep portable</strong><br/><sub>One <code>SKILL.md</code> payload can be installed in Codex, Claude Code, Cursor, VS Code/Copilot, OpenCode and other compatible clients.</sub></td>
-    <td><strong>📦 Keep shipping</strong><br/><sub>Outputs are organized into a versioned, hashed package that a teammate can inspect, reproduce and hand off.</sub></td>
+    <td><strong>✅ Keep honest</strong><br/>Mechanical gates catch missing runs, inconsistent algorithm claims, citation gaps, PDF issues and delivery drift.</td>
+    <td><strong>🌐 Keep portable</strong><br/>One <code>SKILL.md</code> payload can be installed in Codex, Claude Code, Cursor, VS Code/Copilot, OpenCode and other compatible clients.</td>
+    <td><strong>📦 Keep shipping</strong><br/>Outputs are organized into a versioned, hashed package that a teammate can inspect, reproduce and hand off.</td>
   </tr>
 </table>
 
@@ -62,14 +62,19 @@ These are executable repository entry points, not just feature labels:
 
 <table>
   <tr>
-    <td width="33%"><a href="./scripts/install_skill.py"><strong>🧰 Cross-agent installer</strong></a><br/><code>install_skill.py</code><br/><sub>Safely copy the full runtime payload by client and project/user scope.</sub></td>
-    <td width="33%"><a href="./scripts/bootstrap_run.py"><strong>🗺️ Workspace bootstrap</strong></a><br/><code>bootstrap_run.py</code><br/><sub>Create the source packet, state directory, competition route and recovery scene.</sub></td>
-    <td width="33%"><a href="./scripts/doctor.py"><strong>🩺 Environment doctor</strong></a><br/><code>doctor.py</code><br/><sub>Check Python, LaTeX, Pandoc, payload integrity and Codex metadata.</sub></td>
+    <td width="33%"><a href="./scripts/install_skill.py"><strong>🧰 Cross-agent installer</strong></a><br/><code>install_skill.py</code><br/>Safely copy the full runtime payload by client and project/user scope.</td>
+    <td width="33%"><a href="./scripts/bootstrap_run.py"><strong>🗺️ Workspace bootstrap</strong></a><br/><code>bootstrap_run.py</code><br/>Create the source packet, state directory, competition route and recovery scene.</td>
+    <td width="33%"><a href="./scripts/doctor.py"><strong>🩺 Environment doctor</strong></a><br/><code>doctor.py</code><br/>Check Python, LaTeX, Pandoc, payload integrity and Codex metadata.</td>
   </tr>
   <tr>
-    <td><a href="./examples/quickstart/run_demo.py"><strong>🧪 Offline demo</strong></a><br/><code>run_demo.py</code><br/><sub>Generate deterministic results, sensitivity analysis and a hashed manifest.</sub></td>
-    <td><a href="./scripts/verify_project.py"><strong>🔍 Release gate</strong></a><br/><code>verify_project.py</code><br/><sub>Check structure, versions, JSON/YAML and public CLI contracts.</sub></td>
-    <td><a href="./scripts/validate_delivery.py"><strong>📦 Delivery gate</strong></a><br/><code>validate_delivery.py</code><br/><sub>Cross-check the paper, code, results, QA, citations and ready state.</sub></td>
+    <td><a href="./examples/quickstart/run_demo.py"><strong>🧪 Offline demo</strong></a><br/><code>run_demo.py</code><br/>Generate deterministic results, sensitivity analysis and a hashed manifest.</td>
+    <td><a href="./scripts/verify_project.py"><strong>🔍 Release gate</strong></a><br/><code>verify_project.py</code><br/>Check structure, versions, JSON/YAML and public CLI contracts.</td>
+    <td><a href="./scripts/validate_delivery.py"><strong>📦 Delivery gate</strong></a><br/><code>validate_delivery.py</code><br/>Cross-check the paper, code, results, QA, citations and ready state.</td>
+  </tr>
+  <tr>
+    <td><a href="./scripts/status.py"><strong>📊 Status panel</strong></a><br/><code>status.py</code><br/>Show the current stage, blockers, mode and machine-readable handoff state.</td>
+    <td><a href="./scripts/plan_paper_budget.py"><strong>📐 Page budget</strong></a><br/><code>plan_paper_budget.py</code><br/>Allocate space across the body, abstract and supplement from evidence load.</td>
+    <td><a href="./scripts/build_sbom.py"><strong>🧾 SBOM</strong></a><br/><code>build_sbom.py</code><br/>Generate a SHA-256 source-component inventory for release audits.</td>
   </tr>
 </table>
 
@@ -115,6 +120,103 @@ Use mathmodel-skill in Guided Mode. At each stage, show candidate approaches, ev
 Audit this modelling paper for model–code–result consistency, statistics, citations, page budget, anonymity, PDF structure and delivery manifest. Propose only evidence-backed minimal changes and state which issues block a submission-ready result.
 ```
 
+</details>
+
+<details>
+<summary><strong>⑤ I want to choose the contest, mode and plotting backend</strong></summary>
+
+```bash
+python scripts/bootstrap_run.py --workspace ./my-contest \
+  --mode guided --competition auto --plot-backend python \
+  --problem ./problem.pdf --attachment ./data.xlsx
+```
+
+Switch `--mode` to `autopilot` for continuous execution. `--competition` accepts `cumcm`, `mcm`, `diangong` or automatic detection.
+</details>
+
+<details>
+<summary><strong>⑥ I need to resume after an interruption or read machine state</strong></summary>
+
+```bash
+python scripts/bootstrap_run.py --workspace ./my-contest --resume \
+  --mode autopilot --competition auto
+python scripts/doctor.py --workspace ./my-contest --json
+```
+
+Resume reads the existing `state/decision_log.json` without replacing team decisions. `--json` makes diagnostics easy to consume from CI, scripts or another agent.
+</details>
+
+<details>
+<summary><strong>⑦ I want to package the paper, disclosure and SBOM</strong></summary>
+
+```bash
+python scripts/render_paper.py --workspace ./my-contest/paper_workspace \
+  --output-dir ./my-contest/paper_output
+python scripts/build_ai_disclosure.py --log ./my-contest/qa/ai_usage_log.json \
+  --output ./my-contest/qa/AI_usage_details.pdf
+python scripts/validate_delivery.py --workspace ./my-contest
+python scripts/package_delivery.py --workspace ./my-contest
+python scripts/build_sbom.py --source . --output ./my-contest/qa/sbom.json \
+  --version v7.4.5
+```
+
+The last two commands are delivery gates: run them after the paper, code, results and compliance checks are complete. A failed gate preserves blockers instead of fabricating `submission-ready`.
+</details>
+
+## Power-user feature panel
+
+The repository is organized as four clickable layers: input → computation → writing → delivery. Every entry below points to a real script or rule file.
+
+<table>
+  <tr>
+    <td width="25%"><a href="./scripts/bootstrap_run.py"><strong>📥 Input</strong></a><br/>Problem, attachments, hashed source packet and contest routing.</td>
+    <td width="25%"><a href="./references/stage_03_model_selection.md"><strong>🧠 Modelling</strong></a><br/>Candidate comparison, rejection logs, assumptions and notation.</td>
+    <td width="25%"><a href="./references/stage_06_robustness.md"><strong>📈 Evidence</strong></a><br/>Real solving, statistics, sensitivity, stability intervals and figures.</td>
+    <td width="25%"><a href="./scripts/package_delivery.py"><strong>🚢 Delivery</strong></a><br/>Paper/PDF, AI disclosure, anonymity checks, manifest and SBOM.</td>
+  </tr>
+</table>
+
+<details>
+<summary><strong>Show the full advanced pipeline</strong></summary>
+
+```text
+source packet
+    ↓  bootstrap_run.py
+state + decision log
+    ↓  stages 0–7
+real solvers + statistics + figures
+    ↓  render_paper.py / build_ai_disclosure.py
+paper + PDF + disclosure
+    ↓  validate_delivery.py
+versioned delivery + SHA-256 manifest + SBOM
+```
+
+</details>
+
+## FAQ
+
+<details>
+<summary><strong>Is it limited to Codex?</strong></summary>
+
+No. The core entry point is the standard `SKILL.md`. The public edition documents Codex, Claude Code, Cursor, VS Code/Copilot and OpenCode installation; any compatible agent that follows the directory convention can load it.
+</details>
+
+<details>
+<summary><strong>Can I use it without LaTeX, Pandoc or external nature skills?</strong></summary>
+
+Yes. The offline demo, state machine, real Python solving, statistics/robustness and most QA checks remain usable. `doctor.py` reports missing optional tools as blockers, and the workflow degrades instead of inventing results.
+</details>
+
+<details>
+<summary><strong>Are the demo results real contest results?</strong></summary>
+
+No. The demo uses deterministic synthetic data from this repository to verify installation, directories, outputs, sensitivity analysis and hashing. A real contest run must provide the problem statement, attachments and executable solvers.
+</details>
+
+<details>
+<summary><strong>How do I contribute safely?</strong></summary>
+
+Read [`CONTRIBUTING.md`](./CONTRIBUTING.md), reproduce issues with synthetic data, and do not upload private team material, credentials, unlicensed papers or third-party templates. Report security issues through [`SECURITY.md`](./SECURITY.md).
 </details>
 
 ## 5-minute quickstart

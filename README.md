@@ -7,7 +7,7 @@
 <div align="center">
 
 <strong>从一道题，到一套能复现、能审计、能交接的建模交付包。</strong><br/>
-<sub>From a problem statement to a reproducible, reviewable, handoff-ready modelling package.</sub>
+<em>From a problem statement to a reproducible, reviewable, handoff-ready modelling package.</em>
 
 <br/>
 
@@ -28,7 +28,7 @@
 <a href="#贡献与社区">参与贡献</a>
 
 <br/>
-<sub>Autopilot when you want momentum · Guided Mode when you want control</sub>
+<em>Autopilot when you want momentum · Guided Mode when you want control</em>
 
 </div>
 
@@ -46,9 +46,9 @@
 
 <table>
   <tr>
-    <td align="center" width="33%"><strong>🚀 Autopilot</strong><br/><sub>给出题面和附件，连续推进到可验证交付包。</sub></td>
-    <td align="center" width="33%"><strong>🧩 Guided Mode</strong><br/><sub>在选题、模型、稳健性和论文节点逐步确认。</sub></td>
-    <td align="center" width="33%"><strong>🔁 Resume anywhere</strong><br/><sub>用状态日志在中断后恢复，也可跨 Agent 接力。</sub></td>
+    <td align="center" width="33%"><strong>🚀 Autopilot</strong><br/>给出题面和附件，连续推进到可验证交付包。</td>
+    <td align="center" width="33%"><strong>🧩 Guided Mode</strong><br/>在选题、模型、稳健性和论文节点逐步确认。</td>
+    <td align="center" width="33%"><strong>🔁 Resume anywhere</strong><br/>用状态日志在中断后恢复，也可跨 Agent 接力。</td>
   </tr>
 </table>
 
@@ -58,14 +58,19 @@
 
 <table>
   <tr>
-    <td width="33%"><a href="./scripts/install_skill.py"><strong>🧰 跨 Agent 安装</strong></a><br/><code>install_skill.py</code><br/><sub>按客户端与 project/user scope 安全复制完整运行时。</sub></td>
-    <td width="33%"><a href="./scripts/bootstrap_run.py"><strong>🗺️ 工作区初始化</strong></a><br/><code>bootstrap_run.py</code><br/><sub>建立 source packet、状态目录、竞赛路由与恢复现场。</sub></td>
-    <td width="33%"><a href="./scripts/doctor.py"><strong>🩺 环境诊断</strong></a><br/><code>doctor.py</code><br/><sub>检查 Python、LaTeX、Pandoc、payload 和 Codex 元数据。</sub></td>
+    <td width="33%"><a href="./scripts/install_skill.py"><strong>🧰 跨 Agent 安装</strong></a><br/><code>install_skill.py</code><br/>按客户端与 project/user scope 安全复制完整运行时。</td>
+    <td width="33%"><a href="./scripts/bootstrap_run.py"><strong>🗺️ 工作区初始化</strong></a><br/><code>bootstrap_run.py</code><br/>建立 source packet、状态目录、竞赛路由与恢复现场。</td>
+    <td width="33%"><a href="./scripts/doctor.py"><strong>🩺 环境诊断</strong></a><br/><code>doctor.py</code><br/>检查 Python、LaTeX、Pandoc、payload 和 Codex 元数据。</td>
   </tr>
   <tr>
-    <td><a href="./examples/quickstart/run_demo.py"><strong>🧪 离线 Demo</strong></a><br/><code>run_demo.py</code><br/><sub>用确定性合成数据生成结果、灵敏度分析和哈希清单。</sub></td>
-    <td><a href="./scripts/verify_project.py"><strong>🔍 发布前校验</strong></a><br/><code>verify_project.py</code><br/><sub>检查目录、版本、JSON/YAML 与公共 CLI。</sub></td>
-    <td><a href="./scripts/validate_delivery.py"><strong>📦 交付机械门</strong></a><br/><code>validate_delivery.py</code><br/><sub>核对论文、代码、结果、QA、引用和 submission-ready 状态。</sub></td>
+    <td><a href="./examples/quickstart/run_demo.py"><strong>🧪 离线 Demo</strong></a><br/><code>run_demo.py</code><br/>用确定性合成数据生成结果、灵敏度分析和哈希清单。</td>
+    <td><a href="./scripts/verify_project.py"><strong>🔍 发布前校验</strong></a><br/><code>verify_project.py</code><br/>检查目录、版本、JSON/YAML 与公共 CLI。</td>
+    <td><a href="./scripts/validate_delivery.py"><strong>📦 交付机械门</strong></a><br/><code>validate_delivery.py</code><br/>核对论文、代码、结果、QA、引用和 submission-ready 状态。</td>
+  </tr>
+  <tr>
+    <td><a href="./scripts/status.py"><strong>📊 状态面板</strong></a><br/><code>status.py</code><br/>查看当前阶段、blocker、模式和机器可读交接状态。</td>
+    <td><a href="./scripts/plan_paper_budget.py"><strong>📐 页数预算</strong></a><br/><code>plan_paper_budget.py</code><br/>按证据负担规划正文、摘要与附录空间。</td>
+    <td><a href="./scripts/build_sbom.py"><strong>🧾 SBOM 清单</strong></a><br/><code>build_sbom.py</code><br/>生成带 SHA-256 的源码组件清单，便于发布审计。</td>
   </tr>
 </table>
 
@@ -114,12 +119,55 @@ python examples/quickstart/run_demo.py --output demo-output
 </details>
 
 <details>
+<summary><strong>⑤ 我想自定义竞赛、模式与绘图后端</strong></summary>
+
+```bash
+python scripts/bootstrap_run.py --workspace ./my-contest \
+  --mode guided --competition auto --plot-backend python \
+  --problem ./problem.pdf --attachment ./data.xlsx
+```
+
+把 `--mode` 换成 `autopilot` 可连续推进；`--competition` 支持 `cumcm`、`mcm`、`diangong` 或自动识别。
+</details>
+
+<details>
+<summary><strong>⑥ 我想在中断后恢复，或只查看机器可读状态</strong></summary>
+
+```bash
+python scripts/bootstrap_run.py --workspace ./my-contest --resume \
+  --mode autopilot --competition auto
+python scripts/doctor.py --workspace ./my-contest --json
+```
+
+恢复只读取现有 `state/decision_log.json`，不会覆盖团队已经做出的决策；`--json` 方便 CI、脚本或其他 Agent 消费检查结果。
+</details>
+
+<details>
+<summary><strong>⑦ 我想把论文、披露与 SBOM 一起打包</strong></summary>
+
+```bash
+python scripts/render_paper.py --workspace ./my-contest/paper_workspace \
+  --output-dir ./my-contest/paper_output
+python scripts/build_ai_disclosure.py --log ./my-contest/qa/ai_usage_log.json \
+  --output ./my-contest/qa/AI工具使用详情.pdf
+python scripts/validate_delivery.py --workspace ./my-contest
+python scripts/package_delivery.py --workspace ./my-contest
+python scripts/build_sbom.py --source . --output ./my-contest/qa/sbom.json \
+  --version v7.4.5
+```
+
+最后两个命令是交付门：只在论文、代码、结果和合规检查完成后运行；校验失败会保留 blocker，不会伪造 `submission-ready`。
+</details>
+
+<details>
 <summary><strong>目录导航</strong></summary>
 
 - [5 分钟快速开始](#5-分钟快速开始)
 - [为什么值得关注](#为什么值得关注)
 - [可直接体验的工具箱](#可直接体验的工具箱)
 - [交互式上手](#交互式上手)
+- [功能面板](#功能面板)
+- [常见问题](#常见问题)
 - [主要能力](#主要能力)
 - [工程架构](#工程架构)
 - [支持范围](#支持范围)
@@ -130,6 +178,62 @@ python examples/quickstart/run_demo.py --output demo-output
 - [数据、来源与隐私边界](#数据来源与隐私边界)
 - [License](#license)
 
+</details>
+
+## 功能面板
+
+把仓库能力按“输入 → 计算 → 写作 → 交付”拆成可点击的四层；每个入口都对应真实脚本或规则文件。
+
+<table>
+  <tr>
+    <td width="25%"><a href="./scripts/bootstrap_run.py"><strong>📥 输入层</strong></a><br/>题面、附件、哈希 source packet 与竞赛路由。</td>
+    <td width="25%"><a href="./references/stage_03_model_selection.md"><strong>🧠 建模层</strong></a><br/>候选模型比较、拒绝记录、假设与符号基线。</td>
+    <td width="25%"><a href="./references/stage_06_robustness.md"><strong>📈 证据层</strong></a><br/>真实求解、统计、敏感性、稳健区间和科研图表。</td>
+    <td width="25%"><a href="./scripts/package_delivery.py"><strong>🚢 交付层</strong></a><br/>论文/PDF、AI 披露、匿名检查、manifest 与 SBOM。</td>
+  </tr>
+</table>
+
+<details>
+<summary><strong>查看一条完整的高级流水线</strong></summary>
+
+```text
+source packet
+    ↓  bootstrap_run.py
+state + decision log
+    ↓  stage 0–7
+real solvers + statistics + figures
+    ↓  render_paper.py / build_ai_disclosure.py
+paper + PDF + disclosure
+    ↓  validate_delivery.py
+versioned delivery + SHA-256 manifest + SBOM
+```
+
+</details>
+
+## 常见问题
+
+<details>
+<summary><strong>它只能在 Codex 里用吗？</strong></summary>
+
+不是。核心入口是标准 `SKILL.md`，公开版提供 Codex、Claude Code、Cursor、VS Code/Copilot、OpenCode 的安装路径；其他兼容 Agent 只要支持该目录约定，也可以手动放入其 skills 目录。
+</details>
+
+<details>
+<summary><strong>没有 LaTeX、Pandoc 或外部 nature skills 还能用吗？</strong></summary>
+
+可以。离线 Demo、状态机、真实 Python 求解、统计/稳健性和多数 QA 不依赖它们；缺少可选工具时，`doctor.py` 会报告 blocker，工作流会降级而不是补造结果。
+</details>
+
+<details>
+<summary><strong>Demo 的结果是真实竞赛结果吗？</strong></summary>
+
+不是。Demo 只使用仓库内确定性的合成数据，用来验证安装、目录、结果、灵敏度分析和哈希清单；真实竞赛必须提供题面、附件并运行真实求解代码。
+</details>
+
+<details>
+<summary><strong>如何安全地贡献？</strong></summary>
+
+先读 [`CONTRIBUTING.md`](./CONTRIBUTING.md)，用合成数据复现问题，不要提交私人队伍材料、凭据、未授权论文或第三方模板；安全问题请走 [`SECURITY.md`](./SECURITY.md) 的私下渠道。
 </details>
 
 ## 5 分钟快速开始

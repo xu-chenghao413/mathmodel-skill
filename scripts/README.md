@@ -22,6 +22,16 @@ python /path/to/mathmodel-skill/scripts/install_skill.py \
 
 安装后的便携 payload 可以直接运行 `python scripts/doctor.py --skip-tools`。Codex 的 `agents/openai.yaml`、`.codex-plugin/plugin.json` 和 plugin shim 属于可选元数据；在完整源码 checkout 中如需强制检查它们，可运行 `python scripts/doctor.py --require-codex --skip-tools`。
 
+### `status.py` — 状态面板
+
+读取用户工作区的 `state/decision_log.json`，用人类可读或 JSON 格式显示当前竞赛、交互模式、阶段、blocker 和 `submission_ready` 状态；适合中断恢复、CI 或跨 Agent 接力。
+
+```bash
+python scripts/status.py --workspace ./my-contest
+python scripts/status.py --workspace ./my-contest --json
+python scripts/status.py --workspace ./my-contest --require-ready
+```
+
 ### `verify_project.py` — 发布前结构与 CLI 校验
 
 检查必需目录、JSON/YAML 语法、版本号一致性，并可对公共 CLI 运行 `--help`：

@@ -29,6 +29,7 @@ REQUIRED_PATHS = (
     "skills/mathmodel-skill/SKILL.md",
     "scripts/install_skill.py",
     "scripts/doctor.py",
+    "scripts/status.py",
     "scripts/console.py",
     "scripts/build_sbom.py",
     "examples/quickstart/run_demo.py",
@@ -37,6 +38,7 @@ REQUIRED_PATHS = (
 )
 CLI_ENTRYPOINTS = (
     "scripts/doctor.py",
+    "scripts/status.py",
     "scripts/install_skill.py",
     "scripts/score_artifact.py",
     "scripts/render_paper.py",
