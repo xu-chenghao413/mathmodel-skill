@@ -2,6 +2,13 @@
 
 All notable public changes are recorded here.
 
+## 7.4.2
+
+- Added a dependency-free synthetic quickstart that generates input, state, model-card, result, and SHA-256 manifest artifacts in one command.
+- Added a cross-platform installer smoke test for Ubuntu, macOS, and Windows, and made CI encoding explicit with `PYTHONUTF8=1`.
+- Added two regression tests covering budget conservation and safe demo-directory handling.
+- Added a five-minute README entry point and documented the portable-install smoke check.
+
 ## 7.4.1
 
 - Fixed portable-payload self-checks by making Codex-only metadata optional and adding an installed-package doctor regression test.

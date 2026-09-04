@@ -1,0 +1,6 @@
+region,population,demand_index
+North,1200,1.20
+South,800,0.80
+East,1000,1.00
+West,600,0.90
+Central,1400,1.10

@@ -1,6 +1,6 @@
 # mathmodel-skill
 
-[![Version](https://img.shields.io/badge/version-v7.4.1-blueviolet)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v7.4.2-blueviolet)](./CHANGELOG.md)
 [![CI](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/xu-chenghao413/mathmodel-skill/actions/workflows/ci.yml)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-cross--agent-10A37F)](https://agentskills.io/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](./templates/shared/requirements.txt)
@@ -13,6 +13,24 @@
 > 本项目协助团队组织和核验工作，不保证获奖，也不会在缺少题面、数据或真实运行结果时补造结论。
 
 > **一句话定位：** 把“读题 → 建模 → 真实求解 → 统计稳健性 → 论文写作 → 盲审 → 可复现交付”固化为一个跨 Agent、可恢复、可审计的工程化工作流。
+
+## 5 分钟快速开始
+
+先克隆公开版并安装完整运行时 payload：
+
+```bash
+git clone https://github.com/xu-chenghao413/mathmodel-skill.git
+cd mathmodel-skill
+python scripts/install_skill.py --source . --destination .agents/skills/mathmodel-skill
+```
+
+然后运行一个完全离线、只含合成数据的端到端示例：
+
+```bash
+python examples/quickstart/run_demo.py --output demo-output
+```
+
+示例会生成 `input/`、`state/`、`analysis/`、`results/` 和带 SHA-256 清单的 `qa/manifest.json`；它不会把结果写回 skill 安装目录。完整说明见 [`examples/quickstart/README.md`](./examples/quickstart/README.md)。安装后，在支持 Agent Skills 的客户端中重新加载 skill，并提供题面和附件即可开始真实竞赛工作流。
 
 ## 为什么值得关注
 
@@ -278,7 +296,7 @@ Codex skill 与 plugin 的组织方式分别对齐 [OpenAI Skills 文档](https:
 
 ## 设计影响与可选集成
 
-本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.4.1 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
+本项目受到通用数学建模工作流以及已安装 `mcm`、`nature-*` skills 的流程思想启发。v7.4.2 公开版只保留本项目的新增实现、重构内容和一般性方法，不打包这些外部 skills 的源码、文档或资产。
 
 历史来源之一是 [handsomeZR-netizen/mathmodel-skill](https://github.com/handsomeZR-netizen/mathmodel-skill)。其 MIT 通知适用于相应历史部分；本公开版的新增和修改由 `xu-chenghao413` 维护。该链接用于来源和许可证核对，不表示本仓库属于原仓库所有者。
 
@@ -331,7 +349,7 @@ python -m unittest discover -s tests -v
 python scripts/doctor.py
 ```
 
-GitHub Actions 在每次 push / pull request 上用 Python 3.10 和 3.12 执行源码编译、91 项回归测试，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
+GitHub Actions 在每次 push / pull request 上用 Python 3.10 和 3.12 执行源码编译、回归测试，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；独立的安装冒烟任务会在 Ubuntu、macOS 和 Windows 上安装便携 payload，并运行合成 quickstart。本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
 
 发布采用版本号、`CHANGELOG.md` 和 annotated tag 对齐的方式；推送 `v*` tag 后，Release workflow 会重新执行验证，并生成带 SHA-256 校验文件的源码归档。
 

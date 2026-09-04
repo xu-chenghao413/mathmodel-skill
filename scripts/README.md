@@ -22,6 +22,15 @@ python /path/to/mathmodel-skill/scripts/install_skill.py \
 
 安装后的便携 payload 可以直接运行 `python scripts/doctor.py --skip-tools`。Codex 的 `agents/openai.yaml`、`.codex-plugin/plugin.json` 和 plugin shim 属于可选元数据；在完整源码 checkout 中如需强制检查它们，可运行 `python scripts/doctor.py --require-codex --skip-tools`。
 
+### `smoke_install.py` — 跨平台安装冒烟检查
+
+在临时目录安装完整 payload，确认运行时文件存在、CI/测试/用户 state 没有被复制，并运行一次便携版 `doctor.py`。GitHub Actions 会在 Ubuntu、macOS 和 Windows 上执行它：
+
+```bash
+python scripts/smoke_install.py
+```
+
+---
 ---
 
 ## 运行时脚本 (各 stage 调用)

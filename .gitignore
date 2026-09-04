@@ -2,6 +2,8 @@
 state/decision_log.json
 state/scores.json
 state/iteration_counts.json
+demo-output/
+examples/quickstart/demo-output/
 results/
 figures/
 paper_workspace/

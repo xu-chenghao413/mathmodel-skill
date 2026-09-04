@@ -21,6 +21,7 @@ jobs:
       MPLBACKEND: Agg
       MPLCONFIGDIR: /tmp/mathmodel-matplotlib
       PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUTF8: "1"
 
     steps:
       - name: Check out repository
@@ -47,3 +48,30 @@ jobs:
           python scripts/doctor.py --competition cumcm --skip-tools --require-codex
           python scripts/doctor.py --competition mcm --skip-tools
           python scripts/doctor.py --competition diangong --skip-tools
+
+  install-smoke:
+    name: Portable install (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    env:
+      PYTHONUTF8: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Run portable install smoke test
+        run: python scripts/smoke_install.py
+
+      - name: Run synthetic quickstart
+        run: python examples/quickstart/run_demo.py --output "${{ runner.temp }}/mathmodel-demo-output"
