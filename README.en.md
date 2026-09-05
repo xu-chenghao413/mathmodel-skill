@@ -329,6 +329,49 @@ This public edition is maintained by `xu-chenghao413` and is not an official for
 
 Unless a file says otherwise, maintainer-authored code, documentation and templates are released under the [MIT License](./LICENSE). MIT does not relicense external skills, contest rules, papers, datasets, fonts, trademarks or other third-party material.
 
+## Token and compute budget
+
+The full workflow uses multi-stage reasoning, real code execution, robustness
+analysis, citation checks, paper rendering and blind review. It therefore uses
+substantially more context and model calls than a normal one-shot answer. Start
+with the offline demo before committing to a complete Autopilot run.
+
+The following are planning ranges for cumulative model input and output tokens,
+not billing guarantees. They exclude client-hidden context, PDF/image parsing,
+retries, cache effects and external-tool usage. Long statements, large
+attachments and additional subproblems can move a run above the range:
+
+| Scope | Typical cumulative range | Suggested strategy |
+|---|---:|---|
+| Doctor, install smoke test and offline demo | about 1k–5k | Validate the environment first |
+| Problem parsing, selection and decomposition | about 5k–20k | Use Guided Mode and confirm before expanding |
+| One subproblem: model, executable solve and robustness | about 10k–40k | Run by stage and reuse state/results |
+| Full paper, citations, PDF and final audit | about 40k–120k | Start only after the source packet and code are stable |
+| Multiple problems, large attachments and blind revisions | often 100k+ | Reserve budget or split the work into tasks |
+
+To control usage, run `doctor.py` and the quickstart first; request only the
+current stage and necessary artifacts; prefer section-level patches over full
+rewrites; resume from `state/decision_log.json`; and load optional `nature-*`,
+citation or reviewer capabilities only when they are needed. Ask for compact
+summaries, diffs and next actions instead of repeated full documents. If your
+client exposes token telemetry, use that as the source of truth and report
+unexpected growth with a sanitized reproduction.
+
+## Contributions welcome
+
+The public workflow is intentionally open to measurable improvements. Useful
+contributions include lower token or latency profiles, stronger cross-agent
+adapters, evaluation fixtures, competition-rule routing, paper templates and
+clearer installation, privacy and provenance boundaries. A pull request is
+most useful when it includes a minimal synthetic fixture, validation commands,
+compatibility notes and a changelog entry; behavior changes can add a case under
+[`evals/`](./evals/).
+
+Please share sanitized failures, performance measurements and design ideas via
+issues or pull requests. Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) first, and
+never upload problem statements, private data, team identifiers, credentials or
+unlicensed third-party material.
+
 ## Development
 
 ```bash

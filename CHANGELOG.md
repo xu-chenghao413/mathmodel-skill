@@ -8,6 +8,7 @@ All notable public changes are recorded here.
 - Added provider-agnostic contract evaluations for competition, mode, evidence and delivery-gate behavior.
 - Added locked development dependencies, a reproducibility manifest, Python 3.10–3.12 CI coverage and security automation.
 - Expanded maintainer, contribution, support and release-verification documentation.
+- Documented realistic token-budget ranges, usage controls and contribution paths in both README languages.
 
 ## 7.4.5
 
