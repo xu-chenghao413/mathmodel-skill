@@ -620,7 +620,7 @@ uv run python scripts/doctor.py
 
 CI 与发布使用 [`.github/requirements-ci.txt`](./.github/requirements-ci.txt) 中的精确版本；用户运行时仍可按 [`templates/shared/requirements.txt`](./templates/shared/requirements.txt) 的兼容下限安装依赖。
 
-GitHub Actions 在每次 push / pull request 上用 Python 3.10–3.12、Ubuntu/macOS/Windows 三平台执行源码编译、回归测试、结构与 CLI 校验、契约评测、覆盖率基线，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；独立的安装冒烟任务还会安装便携 payload 并运行合成 quickstart。`security.yml` 另外执行 Gitleaks、pip-audit 和 Ruff；在已启用 GitHub Code Scanning 的仓库中还运行 CodeQL，当前私有仓库若不具备该能力会明确跳过 CodeQL 上传而保持同名检查通过。覆盖率报告作为 CI artifact 保存，当前门槛为 30% 以防止基线倒退。本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
+GitHub Actions 在每次 push / pull request 上用 Python 3.10–3.12、Ubuntu/macOS/Windows 三平台执行源码编译、回归测试、结构与 CLI 校验、契约评测、覆盖率基线，以及 CUMCM、MCM/ICM、电工杯三套 competition preflight；独立的安装冒烟任务还会安装便携 payload 并运行合成 quickstart。`security.yml` 另外执行 Gitleaks、pip-audit 和 Ruff；公开仓库（或设置仓库变量 `CODEQL_ENABLED=true` 且已启用 Code Scanning 的私有仓库）还运行 CodeQL。当前私有仓库若不具备该能力会明确跳过 CodeQL 上传而保持同名检查通过。覆盖率报告作为 CI artifact 保存，当前门槛为 30% 以防止基线倒退。本地 `doctor.py` 还会检查当前机器的 Pandoc、TeX 和建模依赖。
 
 发布采用版本号、`CHANGELOG.md` 和 annotated tag 对齐的方式；推送 `v*` tag 后，Release workflow 会重新执行验证，并生成带 SHA-256 校验文件和 SBOM 的源码归档，同时使用 GitHub Artifact Attestations 生成构建来源证明。
 
